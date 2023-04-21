@@ -65,18 +65,3 @@ CREATE TABLE `route` (
 	REFERENCES users(id)
 )
 
--- --------------------------------------------------------
-
---
--- Table structure for table `marker`
---
-
-CREATE TABLE `marker` (
-  `marker_id` int(11) NOT NULL PRIMARY KEY,
-  `route_id` int(11) NOT NULL,
-  `road_name` varchar(30) NOT NULL,
-  `road_type` varchar(30) NOT NULL,
-  `description` varchar(100) NOT NULL,
-  CONSTRAINT FK_routeMrker FOREIGN KEY (route_id)
-	REFERENCES route(route_id)
-)
