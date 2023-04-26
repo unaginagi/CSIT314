@@ -37,7 +37,7 @@ class userAccount
         try
         {
             PreparedStatement myStmt; 
-            myStmt = myCon.prepareStatement("INSERT INTO userAccount (name, DOB, user, password," +
+            myStmt = con.prepareStatement("INSERT INTO userAccount (name, DOB, user, password," +
                                        "phoneNo, email, address) values (" + name + ", " + DOB
                                         + ", " + user + ", " + password + ", " + phoneNo + 
                                         "," + email + ", " + address + ")");
@@ -55,7 +55,7 @@ class userAccount
         try
         {
             PreparedStatement myStmt; 
-            myStmt = myCon.prepareStatement("Select * from userAccount where UID = " + UID);
+            myStmt = con.prepareStatement("Select * from userAccount where UID = " + UID);
             ResultSet rset = myStmt.executeQuery();
             String name = rset.getString("name");
             Date DOB = rset.getDate("DOB");
@@ -85,7 +85,7 @@ class userAccount
         try
         {
             PreparedStatement myStmt; 
-            myStmt = myCon.prepareStatement("Update userAccount SET name = " + name + ", DOB = " + DOB
+            myStmt = con.prepareStatement("Update userAccount SET name = " + name + ", DOB = " + DOB
                                               + ", user = " + user + ", password = " + password 
                                               + ", phoneNo = " + phoneNo + ", email = " + email 
                                               + ", address = " + address + "WHERE UID = " + UID);
@@ -104,7 +104,7 @@ class userAccount
         try
         {
             PreparedStatement myStmt; 
-            myStmt = myCon.prepareStatement("Update userAccount SET name = " + name + ", DOB = " + DOB
+            myStmt = con.prepareStatement("Update userAccount SET name = " + name + ", DOB = " + DOB
                                               + ", user = " + user + ", password = " + password 
                                               + ", phoneNo = " + phoneNo + ", email = " + email 
                                               + ", address = " + address + "WHERE UID = " + UID);
@@ -121,7 +121,7 @@ class userAccount
         try
         {
             PreparedStatement myStmt; 
-            myStmt = myCon.prepareStatement("Update userAccount SET suspended = " + true 
+            myStmt = con.prepareStatement("Update userAccount SET suspended = " + true 
                                             + "WHERE UID = " + UID);
             return true;
         }
@@ -136,7 +136,7 @@ class userAccount
         try
         {
             PreparedStatement myStmt; 
-            myStmt = myCon.prepareStatement("Update userAccount SET suspended = " + false 
+            myStmt = con.prepareStatement("Update userAccount SET suspended = " + false 
                                             + "WHERE UID = " + UID);
             return true;
         }
@@ -154,7 +154,7 @@ class userAccount
         {
             userAccount [] searched;
             PreparedStatement myStmt;
-            myStmt = myCon.prepareStatement("Select * from userAccount where UID = " + UID + " or name = " +
+            myStmt = con.prepareStatement("Select * from userAccount where UID = " + UID + " or name = " +
                                             name + " or DOB = " + DOB + " or user = " + user + " or password = "+
                                             password + " or phoneNo = " + phoneNo + " or email = " + email +
                                             "or address = " + address);
@@ -211,6 +211,6 @@ class userAccount
   {
     String URL = "jdbc:mysql://localhost/";
     Class.forName ("com.mysql.jdbc.Driver");
-    Connection conn = DriverManager.getConnection (URL + "csit314",  "root", "root");
+    Connection con = DriverManager.getConnection (URL + "csit314",  "root", "root");
   }
 }
