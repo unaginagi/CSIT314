@@ -6,9 +6,10 @@ import java.sql.Connection;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 
-public class Movie {
+public class Movie{
 	private int id;
 	private String name;
 	private String description;
@@ -21,6 +22,10 @@ public class Movie {
 		this.name = name;
 		this.description = description;
 		this.genre = genre;
+	}
+	
+	public Movie(String name, String description, String genre) {
+		this(-1, name, description, genre);
 	}
 	
 	public Movie(Movie m) {
@@ -59,47 +64,56 @@ public class Movie {
 		this.genre = genre;
 	}
 	
-	public void addMovie(String name, String description, String genre) throws Exception {
+	public String addMovie(Movie m) throws SQLException, Exception {
 		Connection conn = Helper.establishConnection("jdbc:mysql://localhost:3306/csit314?user=root&password=112899");
-			 
+		 
 	    Statement stmt = conn.createStatement();
-	         
+	    
 	    stmt.executeUpdate("INSERT INTO Movie (Name, Description, Genre)"
-						+ "values ('" + name 
-						+ "', '" + description 
-						+ "', '" + genre + "')");
+						+ "values ('" + m.name 
+						+ "', '" + m.description 
+						+ "', '" + m.genre + "')");
 	         
 	    stmt.close();
 	    conn.close();
+	    
+	    return "Successful";
 	}
 	
-	public Movie getMovie(int id) throws Exception {
+	public Movie retrieveMovie(int id) throws SQLException, Exception {
 		Connection conn = Helper.establishConnection("jdbc:mysql://localhost:3306/csit314?user=root&password=112899");
 			 
 	    Statement stmt = conn.createStatement();
 	         
 	    ResultSet rs = stmt.executeQuery("SELECT * FROM movie "
 	         						   + "WHERE ID = " + id);
-	         
+	    
+	    rs.next();
+	    
 	    return new Movie(rs.getInt("ID"), rs.getString("Name"), rs.getString("Description"), rs.getString("Genre"));
 	}
 	
-	public void updateMovie(int id, String name, String description, String genre) throws Exception {
+	// TO FUTURE ME
+	// NEED TO UPDATE THE BCE DIAGRAM, CLASS DIAGRAM, USE CASE DESCRIPTION, AND CHECK THE SEQUENCE DIAGRAM
+	// AND ALSO MAKE ALL THE DIAGRAMS FOR USE CASE GET MOVIE LIST
+	public String updateMovie(Movie m) throws SQLException, Exception {
 		Connection conn = Helper.establishConnection("jdbc:mysql://localhost:3306/csit314?user=root&password=112899");
 			 
 	    Statement stmt = conn.createStatement();
 	         
 	    stmt.executeUpdate("UPDATE Movie "
-			         	 + "SET Name = '" + name 
-			         	 + "', Description = '" + description 
-			         	 + "', Genre = '" + genre 
-			         	 + "' WHERE ID = " + id);
+			         	 + "SET Name = '" + m.name 
+			         	 + "', Description = '" + m.description 
+			         	 + "', Genre = '" + m.genre 
+			         	 + "' WHERE ID = " + m.id);
 			         
 	    stmt.close();
 	    conn.close();
+	    
+	    return "Successful";
 	}
 	
-	public void deleteMovie(int id) throws Exception {
+	public String deleteMovie(int id) throws SQLException, Exception {
 		Connection conn = Helper.establishConnection("jdbc:mysql://localhost:3306/csit314?user=root&password=112899");
 			 
 	    Statement stmt = conn.createStatement();
@@ -109,9 +123,11 @@ public class Movie {
 			         
 	    stmt.close();
 	    conn.close();
+	    
+	    return "Succesful";
 	}
 	
-	public Movie searchMovie(String name) throws Exception{
+	public Movie searchMovie(String name) throws SQLException, Exception{
 		Connection conn = Helper.establishConnection("jdbc:mysql://localhost:3306/csit314?user=root&password=112899");
 		
 		Statement stmt = conn.createStatement();
@@ -119,12 +135,30 @@ public class Movie {
 	    ResultSet rs = stmt.executeQuery("SELECT * FROM movie "
 	         						   + "WHERE Name = '" + name + "'");
 	    
-	    rs.next();
+	    if(rs.next()) 
+		    return new Movie(rs.getInt("ID"), rs.getString("Name"), rs.getString("Description"), rs.getString("Genre"));
+	    else
+	    	return new Movie();
 	    
-	    return new Movie(rs.getInt("ID"), rs.getString("Name"), rs.getString("Description"), rs.getString("Genre"));
 	}
 	
-	public static ArrayList<Movie> getAll() throws Exception{
+	public String checkDuplicateMovie(Movie m) throws SQLException, Exception{
+		Connection conn = Helper.establishConnection("jdbc:mysql://localhost:3306/csit314?user=root&password=112899");
+		
+		Statement stmt = conn.createStatement();
+	         
+	    ResultSet rs = stmt.executeQuery("SELECT Name, Description, Genre FROM movie "
+		    						   + "WHERE Name = '" + m.name + "' "
+		    						   + "AND Description = '" + m.description + "' "
+		    						   + "AND Genre = '" + m.genre + "'");
+	    
+	    if(rs.next()) 
+	    	return "Duplicate";
+	    else
+	    	return addMovie(m);
+	}
+	
+	public static ArrayList<Movie> getMovieList() throws SQLException, Exception{
 		ArrayList<Movie> movieArr = new ArrayList<>();
 		
 		Connection conn = Helper.establishConnection("jdbc:mysql://localhost:3306/csit314?user=root&password=112899");
