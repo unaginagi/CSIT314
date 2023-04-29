@@ -93,9 +93,6 @@ public class Movie{
 	    return new Movie(rs.getInt("ID"), rs.getString("Name"), rs.getString("Description"), rs.getString("Genre"));
 	}
 	
-	// TO FUTURE ME
-	// NEED TO UPDATE THE BCE DIAGRAM, CLASS DIAGRAM, USE CASE DESCRIPTION, AND CHECK THE SEQUENCE DIAGRAM
-	// AND ALSO MAKE ALL THE DIAGRAMS FOR USE CASE GET MOVIE LIST
 	public String updateMovie(Movie m) throws SQLException, Exception {
 		Connection conn = Helper.establishConnection("jdbc:mysql://localhost:3306/csit314?user=root&password=112899");
 			 
