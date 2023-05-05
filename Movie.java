@@ -1,35 +1,32 @@
-package Entity;
+package entity;
 
-import Helper.Helper;
-
-import java.sql.Connection;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-
-public class Movie{
+public class Movie extends Entity{
 	private int id;
 	private String name;
 	private String description;
 	private String genre;
+	private int duration;
 	
 	public Movie() {}
 	
-	public Movie(int id, String name, String description, String genre) {
+	public Movie(int id, String name, String description, String genre, int duration) {
 		this.id = id;
 		this.name = name;
 		this.description = description;
 		this.genre = genre;
+		this.duration = duration;
 	}
 	
-	public Movie(String name, String description, String genre) {
-		this(-1, name, description, genre);
+	public Movie(String name, String description, String genre, int duration) {
+		this(-1, name, description, genre, duration);
 	}
-	
+
 	public Movie(Movie m) {
-		this(m.getId(), m.getName(), m.getDescription(), m.getGenre());
+		this(m.id, m.name, m.description, m.genre, m.duration);
 	}
 
 	public int getId() {
@@ -64,113 +61,76 @@ public class Movie{
 		this.genre = genre;
 	}
 	
+	public int getDuration() {
+		return duration;
+	}
+
+	public void setDuration(int duration) {
+		this.duration = duration;
+	}
+	
 	public String addMovie(Movie m) throws SQLException, Exception {
-		Connection conn = Helper.establishConnection("jdbc:mysql://localhost:3306/csit314?user=root&password=112899");
-		 
-	    Statement stmt = conn.createStatement();
-	    
-	    stmt.executeUpdate("INSERT INTO Movie (Name, Description, Genre)"
-						+ "values ('" + m.name 
-						+ "', '" + m.description 
-						+ "', '" + m.genre + "')");
-	         
-	    stmt.close();
-	    conn.close();
-	    
-	    return "Successful";
+	    return update("INSERT INTO Movie (Name, Description, Genre, Duration)"
+					+ "values ('" + m.name 
+					+ "', '" + m.description 
+					+ "', '" + m.genre
+					+ "', " + m.duration + ")");
 	}
 	
 	public Movie retrieveMovie(int id) throws SQLException, Exception {
-		Connection conn = Helper.establishConnection("jdbc:mysql://localhost:3306/csit314?user=root&password=112899");
-			 
-	    Statement stmt = conn.createStatement();
-	         
-	    ResultSet rs = stmt.executeQuery("SELECT * FROM movie "
-	         						   + "WHERE ID = " + id);
-	    
+		ResultSet rs = query("SELECT * FROM Movie "
+									  + "WHERE ID = " + id);
+		
 	    rs.next();
 	    
-	    return new Movie(rs.getInt("ID"), rs.getString("Name"), rs.getString("Description"), rs.getString("Genre"));
+	    return new Movie(rs.getInt("ID"), rs.getString("Name"), 
+	    				 rs.getString("Description"), rs.getString("Genre"), rs.getInt("Duration"));
 	}
 	
-	// TO FUTURE ME
-	// NEED TO UPDATE THE BCE DIAGRAM, CLASS DIAGRAM, USE CASE DESCRIPTION, AND CHECK THE SEQUENCE DIAGRAM
-	// AND ALSO MAKE ALL THE DIAGRAMS FOR USE CASE GET MOVIE LIST
-	public String updateMovie(Movie m) throws SQLException, Exception {
-		Connection conn = Helper.establishConnection("jdbc:mysql://localhost:3306/csit314?user=root&password=112899");
-			 
-	    Statement stmt = conn.createStatement();
-	         
-	    stmt.executeUpdate("UPDATE Movie "
-			         	 + "SET Name = '" + m.name 
-			         	 + "', Description = '" + m.description 
-			         	 + "', Genre = '" + m.genre 
-			         	 + "' WHERE ID = " + m.id);
-			         
-	    stmt.close();
-	    conn.close();
-	    
-	    return "Successful";
+	public String updateMovie(Movie m) throws SQLException, Exception {	    
+	    return update("UPDATE Movie "
+	         	 	+ "SET Name = '" + m.name 
+	         	 	+ "', Description = '" + m.description 
+	         	 	+ "', Genre = '" + m.genre
+	         	 	+ "', Duration = " + m.duration
+	         	 	+ " WHERE ID = " + m.id);
 	}
 	
 	public String deleteMovie(int id) throws SQLException, Exception {
-		Connection conn = Helper.establishConnection("jdbc:mysql://localhost:3306/csit314?user=root&password=112899");
-			 
-	    Statement stmt = conn.createStatement();
-	         
-	    stmt.executeUpdate("DELETE FROM Movie "
-			         	 + "WHERE ID = " + id);
-			         
-	    stmt.close();
-	    conn.close();
-	    
-	    return "Succesful";
+	    return update("DELETE FROM Movie "
+	         	 	+ "WHERE ID = " + id);
 	}
 	
 	public Movie searchMovie(String name) throws SQLException, Exception{
-		Connection conn = Helper.establishConnection("jdbc:mysql://localhost:3306/csit314?user=root&password=112899");
-		
-		Statement stmt = conn.createStatement();
-	         
-	    ResultSet rs = stmt.executeQuery("SELECT * FROM movie "
-	         						   + "WHERE Name = '" + name + "'");
+	    ResultSet rs = query("SELECT * FROM Movie "
+	         			   + "WHERE Name = '" + name + "'");
 	    
 	    if(rs.next()) 
-		    return new Movie(rs.getInt("ID"), rs.getString("Name"), rs.getString("Description"), rs.getString("Genre"));
+		    return new Movie(rs.getInt("ID"), rs.getString("Name"), 
+		    				 rs.getString("Description"), rs.getString("Genre"), rs.getInt("Duration"));
 	    else
 	    	return new Movie();
 	    
 	}
 	
-	public String checkDuplicateMovie(Movie m) throws SQLException, Exception{
-		Connection conn = Helper.establishConnection("jdbc:mysql://localhost:3306/csit314?user=root&password=112899");
-		
-		Statement stmt = conn.createStatement();
-	         
-	    ResultSet rs = stmt.executeQuery("SELECT Name, Description, Genre FROM movie "
-		    						   + "WHERE Name = '" + m.name + "' "
-		    						   + "AND Description = '" + m.description + "' "
-		    						   + "AND Genre = '" + m.genre + "'");
+	public ResultSet getDuplicateMovieCheckData(Movie m) throws SQLException, Exception{
+	    ResultSet rs = query("SELECT Name, Description, Genre FROM Movie "
+		    			   + "WHERE Name = '" + m.name + "' "
+		    			   + "AND Description = '" + m.description + "' "
+		    			   + "AND Genre = '" + m.genre + "' "
+		    			   + "AND Duration = " + m.duration);
 	    
-	    if(rs.next()) 
-	    	return "Duplicate";
-	    else
-	    	return addMovie(m);
+	    return rs;
 	}
 	
-	public static ArrayList<Movie> getMovieList() throws SQLException, Exception{
+	public ArrayList<Movie> getMovieList() throws SQLException, Exception{
 		ArrayList<Movie> movieArr = new ArrayList<>();
-		
-		Connection conn = Helper.establishConnection("jdbc:mysql://localhost:3306/csit314?user=root&password=112899");
-		
-		Statement stmt = conn.createStatement();
 	         
-	    ResultSet rs = stmt.executeQuery("SELECT * FROM movie");
+	    ResultSet rs = query("SELECT * FROM Movie");
 	    
-	    while(rs.next()){
+	    while(rs.next())
 	    	movieArr.add(new Movie(rs.getInt("ID"), rs.getString("Name"), 
-	    						   rs.getString("Description"), rs.getString("Genre")));
-	    }
+	    						   rs.getString("Description"), rs.getString("Genre"), rs.getInt("Duration")));
 	    
 	    return movieArr;
 	}
@@ -180,6 +140,7 @@ public class Movie{
 		return String.format("ID: %d%n"
 						   + "Name: %s%n"
 						   + "Description: %s%n"
-						   + "Genre: %s%n", this.id, this.name, this.description, this.genre);
+						   + "Genre: %s%n"
+						   + "Duration: %d%n", this.id, this.name, this.description, this.genre, this.duration);
 	}
 }
