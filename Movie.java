@@ -94,6 +94,7 @@ public class Movie extends Entity{
 	         	 	+ "', Genre = '" + m.genre
 	         	 	+ "', Duration = " + m.duration
 	         	 	+ " WHERE ID = " + m.id);
+
 	}
 	
 	public String deleteMovie(int id) throws SQLException, Exception {
