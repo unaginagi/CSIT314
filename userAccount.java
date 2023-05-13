@@ -136,27 +136,6 @@ public class userAccount
         }
     }
 
-    public boolean unSuspendUserAccount (int UID) throws SQLException, ClassNotFoundException
-    {
-        try
-        {            
-            String URL = "jdbc:mysql://localhost/";
-            Class.forName ("com.mysql.jdbc.Driver");
-            Connection myCon = DriverManager.getConnection (URL + "csit314",  "", "");
-            
-            PreparedStatement myStmt; 
-            myStmt = myCon.prepareStatement("Update userAccount SET suspended = " + false 
-                                            + "WHERE UID = " + UID);
-            
-            ResultSet rset = myStmt.executeQuery();
-            return true;
-        }
-        catch (SQLException e )
-        {
-            return false;
-        }
-    }
-
     public userAccount[] getUserAccount (int UID, String name, Date DOB, String user, String password,
                                         int phoneNo, String email, String address)
                                          throws SQLException, ClassNotFoundException
@@ -170,10 +149,58 @@ public class userAccount
             userAccount [] searched;
             searched = new userAccount [0];
             PreparedStatement myStmt;
-            myStmt = myCon.prepareStatement(address + "Select * from userAccount where UID = " + UID + " or name = " +
-                    name + " or DOB = " + DOB + " or user = " + user + " or password = "+
-                    password + " or phoneNo = " + phoneNo + " or email = " + email +
-                    "or address = ");
+            String statement;
+            if (UID == 0)
+            {
+                statement =  "Select * from userAccount where UID LIKE %" + UID +"%";
+            }
+            else
+            {
+                statement =  "Select * from userAccount where UID is NOT NULL";
+            }
+            
+            if (name == null)
+            {
+                statement += "and name LIKE %" + name + "%";
+            }
+            
+            if (DOB == null)
+            {
+                statement += "and DOB LIKE %" + DOB + "%";
+            }
+            
+            if (user == null)
+            {
+                statement += "and user LIKE %" + user +"%";
+            }
+            
+            if (password == null)
+            {
+                statement += "and password LIKE %" + password +"%";
+            }
+            
+            if (phoneNo == 0)
+            {
+                statement += "and phoneNo LIKE %" + phoneNo+"%";
+            }
+            
+            if (email == null)
+            {
+                statement += "and email LIKE %" + email +"%";
+            }
+            
+            if (address == null)
+            {
+                statement += "and address LIKE %" + address+ "%";
+            }
+            
+            if (UID == -1)
+            {
+                statement = "Select * from userAccount;";
+            }
+            
+            
+            myStmt = myCon.prepareStatement(statement);
             
             ResultSet rset = myStmt.executeQuery();
 
