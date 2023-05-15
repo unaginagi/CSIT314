@@ -104,7 +104,7 @@ public class Movie{
 	    return new String[] {rs.getString("ID"), rs.getString("Name"), 
 				 rs.getString("Description"), rs.getString("Genre"), rs.getString("Duration")};
 	}
-	
+
 	public String updateMovie(Movie m) throws SQLException, Exception {
 		Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
 		Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/csit314?user=root&password=112899");
@@ -122,6 +122,7 @@ public class Movie{
 	    conn.close();
 	    
 	    return "Successful";
+
 	}
 	
 	public String deleteMovie(String id) throws SQLException, Exception {
