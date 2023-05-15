@@ -8,7 +8,7 @@ import entity.Movie;
 public class GetMovieListController {
 	private final Movie movie = new Movie();
 	
-	public ArrayList<Movie> executeTask() throws SQLException, Exception{
+	public ArrayList<String[]> executeTask() throws SQLException, Exception{
 		return movie.getMovieList();
 	}
 }

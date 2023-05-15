@@ -5,14 +5,14 @@ import java.sql.SQLException;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 
-import controller.DeleteMovieController;
+import controller.DeleteMovieSessionController;
 
-public class DeleteMovieBoundary {
-	private final DeleteMovieController dmc = new DeleteMovieController();
+public class DeleteMovieSessionBoundary {
+private final DeleteMovieSessionController dmsc = new DeleteMovieSessionController();
 	
-	public void constructBoundary(JDialog dialog, String id){		
+	public void constructBoundary(JDialog dialog, String roomId, String sessionTiming){		
 		try {
-			JOptionPane.showMessageDialog(dialog, dmc.executeTask(id));
+			JOptionPane.showMessageDialog(dialog, dmsc.executeTask(roomId, sessionTiming));
 			
 		} catch (SQLException e) {
 			JOptionPane.showMessageDialog(dialog, "Database Error", "Alert", JOptionPane.WARNING_MESSAGE);

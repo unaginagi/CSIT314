@@ -1,44 +1,49 @@
 package entity;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 
-public class CinemaRoom extends Entity{
-	private int id;
+public class CinemaRoom{
+	private String id;
+	private String name;
 	private int capacity;
 	private String state;
 	
 	public CinemaRoom() {}
 	
-	public CinemaRoom(int id, int capacity, String state) {
+	public CinemaRoom(String id, String name, int capacity, String state) {
 		this.id = id;
+		this.name = name;
 		this.capacity = capacity;
 		this.state = state;
 	}
 	
-	public CinemaRoom(int capacity, String state) {
-		this(-1, capacity, state);
+	public CinemaRoom(String name, int capacity, String state) {
+		this(null, name, capacity, state);
 	}
 	
 	public CinemaRoom(CinemaRoom cr) {
-		this(cr.id, cr.capacity, cr.state);
+		this(cr.id, cr.name, cr.capacity, cr.state);
 	}
 
-	public String getState() {
-		return state;
-	}
-
-	public void setState(String state) {
-		this.state = state;
-	}
-
-	public int getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(String id) {
 		this.id = id;
+	}
+	
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public int getCapacity() {
@@ -49,60 +54,159 @@ public class CinemaRoom extends Entity{
 		this.capacity = capacity;
 	}
 	
-	public String addRoom(CinemaRoom cm) throws SQLException, Exception {	    
-	    return update("INSERT INTO CinemaRoom (Capacity, State)"
-					+ "values (" + cm.capacity
-					+ ", '" + cm.state + "')");
+	public String getState() {
+		return state;
+	}
+
+	public void setState(String state) {
+		this.state = state;
 	}
 	
-	public CinemaRoom retrieveRoom(int id) throws SQLException, Exception {	         
-	    ResultSet rs = query("SELECT * FROM CinemaRoom "
+	public String addRoom(CinemaRoom cr) throws SQLException, Exception {
+		Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
+		Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/csit314?user=root&password=112899");
+		
+	    Statement stmt = conn.createStatement();
+	    
+	    stmt.executeUpdate("INSERT INTO CinemaRoom (Name, Capacity, State)"
+					+ "values ('" + cr.name
+					+ "', " + cr.capacity
+					+ ", '" + cr.state + "')");
+	    
+	    return "Successful";
+	}
+	
+	public String[] retrieveRoom(String id) throws SQLException, Exception {
+		Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
+		Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/csit314?user=root&password=112899");
+		
+	    Statement stmt = conn.createStatement();
+		
+	    ResultSet rs = stmt.executeQuery("SELECT * FROM CinemaRoom "
 	         			   + "WHERE ID = " + id);
 	    
 	    rs.next();
 	    
-	    return new CinemaRoom(rs.getInt("ID"), rs.getInt("Capacity"), rs.getString("State"));
+	    return new String[] {rs.getString("ID"), rs.getString("Name"), rs.getString("Capacity"), rs.getString("State")};
 	}
 	
-	public String updateRoom(CinemaRoom cm) throws SQLException, Exception {
-	    return update("UPDATE CinemaRoom "
-	    			+ "SET Capacity = " + cm.capacity
-	    			+ ", State = '" + cm.state
-	    			+ "' WHERE ID = " + cm.id);
+	public String updateRoom(CinemaRoom cr) throws SQLException, Exception {
+		Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
+		Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/csit314?user=root&password=112899");
+		
+	    Statement stmt = conn.createStatement();
+	    
+	    stmt.executeUpdate("UPDATE CinemaRoom "
+	    			+ "SET Name = '" + cr.name
+	    			+ "', Capacity = " + cr.capacity
+	    			+ ", State = '" + cr.state
+	    			+ "' WHERE ID = " + cr.id);
+	    
+	    return "Successful";
 	}
 	
-	public String deleteRoom(int id) throws SQLException, Exception {
-	    return update("DELETE FROM CinemaRoom "
+	public String deleteRoom(String id) throws SQLException, Exception {
+		Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
+		Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/csit314?user=root&password=112899");
+		
+	    Statement stmt = conn.createStatement();
+		
+	    stmt.executeUpdate("DELETE FROM CinemaRoom "
 	    			+ "WHERE ID = " + id);
+	    
+	    return "Successful";
 	}
 	
-	public ArrayList<CinemaRoom> searchRoom(String state) throws SQLException, Exception{
-		ArrayList<CinemaRoom> roomArr = new ArrayList<>();
+	public ArrayList<String[]> searchRoom(String state) throws SQLException, Exception{
+		ArrayList<String[]> roomArr = new ArrayList<>();
+		
+		Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
+		Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/csit314?user=root&password=112899");
+		
+	    Statement stmt = conn.createStatement();
 
-	    ResultSet rs = query("SELECT * FROM CinemaRoom "
+	    ResultSet rs = stmt.executeQuery("SELECT * FROM CinemaRoom "
 	    				   + "WHERE State = '" + state + "'");
 	    
 	    while(rs.next()) 
-		    roomArr.add(new CinemaRoom(rs.getInt("ID"), rs.getInt("Capacity"), rs.getString("State")));
+		    roomArr.add(new String[] {rs.getString("ID"), rs.getString("Name"), rs.getString("Capacity"), rs.getString("State")});
 	    
 	    return roomArr;
 	}
 	
-	public ArrayList<CinemaRoom> getRoomList() throws SQLException, Exception{
-		ArrayList<CinemaRoom> roomArr = new ArrayList<>();
+	public String getStateCheckData(String id) throws SQLException, Exception{
+		Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
+		Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/csit314?user=root&password=112899");
+		
+	    Statement stmt = conn.createStatement();
+	    
+	    ResultSet rs = stmt.executeQuery("SELECT State FROM CinemaRoom "
+		    			   + "WHERE ID = " + id);
+	    rs.next();
+	    
+	    return rs.getString("State");
+	}
+	
+	public ResultSet getDuplicateNameCheckData(CinemaRoom cr) throws SQLException, Exception{
+		Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
+		Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/csit314?user=root&password=112899");
+		
+	    Statement stmt = conn.createStatement();
+	    
+	    ResultSet rs = stmt.executeQuery("SELECT ID FROM CinemaRoom "
+		    			   + "WHERE Name = '" + cr.name + "' ");
+	    
+	    return rs;
+	}
+	
+	public ResultSet getRoomIdCheckData(String input) throws SQLException, Exception{
+		Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
+		Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/csit314?user=root&password=112899");
+		
+	    Statement stmt = conn.createStatement();
+	    
+	    ResultSet rs = stmt.executeQuery("SELECT ID FROM CinemaRoom"
+	    							   + " WHERE ID = " + input);
+	    
+	    return rs;
+	}
+	
+	public ResultSet getDuplicateRoomCheckData(CinemaRoom cr) throws SQLException, Exception{
+		Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
+		Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/csit314?user=root&password=112899");
+		
+	    Statement stmt = conn.createStatement();
+	    
+	    ResultSet rs = stmt.executeQuery("SELECT ID FROM CinemaRoom "
+	    				   + "WHERE ID = " + cr.id 
+		    			   + " AND Name = '" + cr.name + "'"
+		    			   + " AND Capacity = " + cr.capacity
+		    			   + " AND State = '" + cr.state + "'");
+	    
+	    return rs;
+	}
+	
+	public ArrayList<String[]> getRoomList() throws SQLException, Exception{
+		ArrayList<String[]> roomArr = new ArrayList<>();
+		
+		Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
+		Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/csit314?user=root&password=112899");
+		
+	    Statement stmt = conn.createStatement();
 
-	    ResultSet rs = query("SELECT * FROM CinemaRoom");
+	    ResultSet rs = stmt.executeQuery("SELECT ID, Name FROM CinemaRoom");
 	    
 	    while(rs.next()) 
-		    roomArr.add(new CinemaRoom(rs.getInt("ID"), rs.getInt("Capacity"), rs.getString("State")));
+		    roomArr.add(new String[] {rs.getString("ID"), rs.getString("Name")});
 	    
 	    return roomArr;
 	}
 	
 	@Override
 	public String toString() {
-		return String.format("ID: %d%n"
-						   + "Capacity: %s%n"
-						   + "State: %s%n", this.id, this.capacity, this.state);
+		return String.format("ID: %s%n"
+						   + "Name: %s%n"
+						   + "Capacity: %d%n"
+						   + "State: %s%n", this.id, this.name, this.capacity, this.state);
 	}
 }

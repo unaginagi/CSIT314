@@ -7,7 +7,7 @@ import entity.Movie;
 public class RetrieveMovieController {
 	private final Movie movie = new Movie();
 	
-	public Movie executeTask(int id) throws SQLException, Exception{
+	public String[] executeTask(String id) throws SQLException, Exception{
 		return movie.retrieveMovie(id);
 	}
 }

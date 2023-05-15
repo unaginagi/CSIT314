@@ -8,11 +8,7 @@ import entity.Movie;
 public class CreateMovieController {
 	private final Movie movie = new Movie();
 	
-	public boolean validateNumOfMoviesInput(String input) {
-		if(input.isBlank()) {
-			return false;
-		}
-		
+	public boolean validateInput(String input) {
 		try {
 			int num = Integer.parseInt(input);
 			
@@ -32,7 +28,7 @@ public class CreateMovieController {
 		ResultSet rs = movie.getDuplicateMovieCheckData(m);
 		
 		if(rs.next())
-			return "Duplicate Entry";
+			return "Duplicate Movie";
 		else
 			return movie.addMovie(m);
 	}

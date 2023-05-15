@@ -1,5 +1,6 @@
 package controller;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import entity.CinemaRoom;
@@ -7,9 +8,28 @@ import entity.CinemaRoom;
 public class CreateCinemaRoomController {
 	private final CinemaRoom cinemaRoom = new CinemaRoom();
 	
-	public String executeTask(int capacity, String state) throws SQLException, Exception {
-		CinemaRoom cm = new CinemaRoom(capacity, state);
+	public boolean validateInput(String input) {
+		try {
+			int num = Integer.parseInt(input);
+			
+			if(num <= 0)
+				return false;
+			
+		} catch (NumberFormatException e) {
+			return false;
+		}
 		
-		return cinemaRoom.addRoom(cm);
+		return true;
+	}
+	
+	public String executeTask(String name, int capacity, String state) throws SQLException, Exception {
+		CinemaRoom cr = new CinemaRoom(name, capacity, state);
+		
+		ResultSet rs = cinemaRoom.getDuplicateNameCheckData(cr);
+		
+		if(rs.next())
+			return "Duplicate name";
+		else
+			return cinemaRoom.addRoom(cr);
 	}
 }

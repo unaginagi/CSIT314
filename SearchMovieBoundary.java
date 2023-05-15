@@ -10,6 +10,7 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
 import controller.SearchMovieController;
@@ -23,10 +24,10 @@ public class SearchMovieBoundary {
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.insets= new Insets(15, 15, 15, 15);
 		
-		String input = JOptionPane.showInputDialog(null, "Enter the movie name");
+		String input = JOptionPane.showInputDialog(dialog, "Enter the movie name");
 		
 		if(input == null)
-			return new JPanel();
+			return null;
 			
 		JLabel idLabel = new JLabel("ID:");
 		idLabel.setFont(new Font("Arial", Font.PLAIN, 25));
@@ -56,7 +57,7 @@ public class SearchMovieBoundary {
 				JOptionPane.showMessageDialog(dialog, "Movie does not exist", "Alert", JOptionPane.WARNING_MESSAGE);
 				dialog.setVisible(false);
 				
-				return new JPanel();
+				return null;
 			}
 			
 		} catch (SQLException e) {
@@ -64,7 +65,6 @@ public class SearchMovieBoundary {
 						
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(dialog, "Unknown Error", "Alert", JOptionPane.WARNING_MESSAGE);
-
 		}
 		
 		JLabel idResultLabel = new JLabel(data[0]);
@@ -85,7 +85,11 @@ public class SearchMovieBoundary {
 		
 		JTextArea decriptionResultArea = new JTextArea(data[2], 5, 11);
 		decriptionResultArea.setFont(new Font("Arial", Font.PLAIN, 20));
+		decriptionResultArea.setLineWrap(true);
+		decriptionResultArea.setWrapStyleWord(true);
 		decriptionResultArea.setEditable(false);
+		
+		JScrollPane descriptionScroll = new JScrollPane(decriptionResultArea);
 		
 		gbc.gridx = 0;
 		gbc.gridy = 0;
@@ -120,7 +124,7 @@ public class SearchMovieBoundary {
 		panel.add(descriptionLabel, gbc);
 		
 		gbc.gridx++;
-		panel.add(decriptionResultArea, gbc);
+		panel.add(descriptionScroll, gbc);
 		
 		return panel;
 	}

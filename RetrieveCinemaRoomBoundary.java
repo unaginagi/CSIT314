@@ -10,13 +10,11 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
 
-import controller.RetrieveMovieController;
+import controller.RetrieveCinemaRoomController;
 
-public class RetrieveMovieBoundary{
-	private final RetrieveMovieController rmc = new RetrieveMovieController();
+public class RetrieveCinemaRoomBoundary {
+private final RetrieveCinemaRoomController rcrc = new RetrieveCinemaRoomController();
 	
 	public JPanel constructBoundary(JDialog dialog, String id){
 		JPanel panel = new JPanel(new GridBagLayout());
@@ -32,21 +30,17 @@ public class RetrieveMovieBoundary{
 		nameLabel.setFont(new Font("Arial", Font.PLAIN, 25));
 		nameLabel.setHorizontalAlignment(JLabel.CENTER);
 		
-		JLabel genreLabel = new JLabel("Genre:");
-		genreLabel.setFont(new Font("Arial", Font.PLAIN, 25));
-		genreLabel.setHorizontalAlignment(JLabel.CENTER);
+		JLabel capacityLabel = new JLabel("Capacity:");
+		capacityLabel.setFont(new Font("Arial", Font.PLAIN, 25));
+		capacityLabel.setHorizontalAlignment(JLabel.CENTER);
 		
-		JLabel durationLabel = new JLabel("Duration:");
-		durationLabel.setFont(new Font("Arial", Font.PLAIN, 25));
-		durationLabel.setHorizontalAlignment(JLabel.CENTER);
-		
-		JLabel descriptionLabel = new JLabel("Description:");
-		descriptionLabel.setFont(new Font("Arial", Font.PLAIN, 25));
-		descriptionLabel.setHorizontalAlignment(JLabel.CENTER);
+		JLabel stateLabel = new JLabel("State:");
+		stateLabel.setFont(new Font("Arial", Font.PLAIN, 25));
+		stateLabel.setHorizontalAlignment(JLabel.CENTER);
 		
 		String[] data = new String[] {};
 		try {
-			data = rmc.executeTask(id);
+			data = rcrc.executeTask(id);
 			
 		} catch (SQLException e) {
 			JOptionPane.showMessageDialog(dialog, "Database Error", "Alert", JOptionPane.WARNING_MESSAGE);
@@ -64,21 +58,13 @@ public class RetrieveMovieBoundary{
 		nameResultLabel.setFont(new Font("Arial", Font.PLAIN, 25));
 		nameResultLabel.setHorizontalAlignment(JLabel.CENTER);
 		
-		JLabel genreResultLabel = new JLabel(data[3]);
-		genreResultLabel.setFont(new Font("Arial", Font.PLAIN, 25));
-		genreResultLabel.setHorizontalAlignment(JLabel.CENTER);
+		JLabel capacityResultLabel = new JLabel(data[2]);
+		capacityResultLabel.setFont(new Font("Arial", Font.PLAIN, 25));
+		capacityResultLabel.setHorizontalAlignment(JLabel.CENTER);
 		
-		JLabel durationResultLabel = new JLabel(data[4]);
-		durationResultLabel.setFont(new Font("Arial", Font.PLAIN, 25));
-		durationResultLabel.setHorizontalAlignment(JLabel.CENTER);
-		
-		JTextArea decriptionResultArea = new JTextArea(data[2], 5, 11);
-		decriptionResultArea.setFont(new Font("Arial", Font.PLAIN, 20));
-		decriptionResultArea.setLineWrap(true);
-		decriptionResultArea.setWrapStyleWord(true);
-		decriptionResultArea.setEditable(false);
-		
-		JScrollPane descriptionScroll = new JScrollPane(decriptionResultArea);
+		JLabel stateResultLabel = new JLabel(data[3]);
+		stateResultLabel.setFont(new Font("Arial", Font.PLAIN, 25));
+		stateResultLabel.setHorizontalAlignment(JLabel.CENTER);
 		
 		gbc.gridx = 0;
 		gbc.gridy = 0;
@@ -96,24 +82,17 @@ public class RetrieveMovieBoundary{
 		
 		gbc.gridx--;
 		gbc.gridy++;
-		panel.add(genreLabel, gbc);
+		panel.add(capacityLabel, gbc);
 		
 		gbc.gridx++;
-		panel.add(genreResultLabel, gbc);
+		panel.add(capacityResultLabel, gbc);
 		
 		gbc.gridx--;
 		gbc.gridy++;
-		panel.add(durationLabel, gbc);
+		panel.add(stateLabel, gbc);
 		
 		gbc.gridx++;
-		panel.add(durationResultLabel, gbc);
-		
-		gbc.gridx--;
-		gbc.gridy++;
-		panel.add(descriptionLabel, gbc);
-		
-		gbc.gridx++;
-		panel.add(descriptionScroll, gbc);
+		panel.add(stateResultLabel, gbc);
 		
 		return panel;
 	}
