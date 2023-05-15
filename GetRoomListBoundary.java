@@ -15,18 +15,18 @@ import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import controller.GetMovieListController;
+import controller.GetRoomListController;
 
-public class GetMovieListBoundary{
-	private final GetMovieListController gmlc = new GetMovieListController();
-	private String movieID;
+public class GetRoomListBoundary {
+	private final GetRoomListController grlc = new GetRoomListController();
+	private String roomID;
 	
-	public String getMovieID() {
-		return movieID;
+	public String getRoomID() {
+		return roomID;
 	}
 	
-	public void setMovieID(String movieID) {
-		this.movieID = movieID;
+	public void setRoomID(String roomID) {
+		this.roomID = roomID;
 	}
 	
 	public JPanel constructBoundary(JDialog dialog){
@@ -38,26 +38,26 @@ public class GetMovieListBoundary{
 		Map<JButton, String> ids = new HashMap<>();
 		
 		try {
-			for(String[] data: gmlc.executeTask()) {
-				JButton movieButton = new JButton(data[1]);
-				movieButton.setFont(new Font("Arial", Font.BOLD, 30));
-				movieButton.setOpaque(false);
-				movieButton.setContentAreaFilled(false);
-				movieButton.setBorderPainted(false);
+			for(String[] data: grlc.executeTask()) {
+				JButton roomButton = new JButton(data[1]);
+				roomButton.setFont(new Font("Arial", Font.BOLD, 30));
+				roomButton.setOpaque(false);
+				roomButton.setContentAreaFilled(false);
+				roomButton.setBorderPainted(false);
 				
-				ids.put(movieButton, data[0]);
+				ids.put(roomButton, data[0]);
 				
-				movieButton.addActionListener(new ActionListener() {
+				roomButton.addActionListener(new ActionListener() {
 					@Override
 					public void actionPerformed(ActionEvent evt) {
 						JButton button = (JButton) (evt.getSource());
-						movieID = ids.get(button);
+						roomID = ids.get(button);
 						dialog.setVisible(false);
 					}
 				});
 				
 				gbc.gridy++;
-				panel.add(movieButton, gbc);
+				panel.add(roomButton, gbc);
 			}
 		} catch (SQLException e) {
 			JOptionPane.showMessageDialog(dialog, "Database Error", "Alert", JOptionPane.WARNING_MESSAGE);

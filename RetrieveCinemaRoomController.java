@@ -7,7 +7,7 @@ import entity.CinemaRoom;
 public class RetrieveCinemaRoomController {
 	private final CinemaRoom cinemaRoom = new CinemaRoom();
 	
-	public CinemaRoom executeTask(int roomID) throws SQLException, Exception{
-		return cinemaRoom.retrieveRoom(roomID);
+	public String[] executeTask(String id) throws SQLException, Exception{
+		return cinemaRoom.retrieveRoom(id);
 	}
 }

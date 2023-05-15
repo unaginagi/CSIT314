@@ -1,43 +1,46 @@
 package entity;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 
-public class MovieSession extends Entity{
-	private int roomID;
+public class MovieSession{
+	private String roomID;
 	private String sessionTiming;
-	private int movieID;
+	private String movieID;
 	
 	public MovieSession() {}
 	
-	public MovieSession(int roomID, String sessionTiming, int movieID) {
+	public MovieSession(String roomID, String sessionTiming, String movieID) {
 		this.roomID = roomID;
 		this.sessionTiming = sessionTiming;
 		this.movieID = movieID;
 	}
 	
 	public MovieSession(String sessionTiming) {
-		this(-1, sessionTiming, -1);
+		this(null, sessionTiming, null);
 	}
 	
 	public MovieSession(MovieSession ms) {
 		this(ms.roomID, ms.sessionTiming, ms.movieID);
 	}
 
-	public int getMovieID() {
+	public String getMovieID() {
 		return movieID;
 	}
 
-	public void setMovieID(int movieID) {
+	public void setMovieID(String movieID) {
 		this.movieID = movieID;
 	}
 
-	public int getRoomID() {
+	public String getRoomID() {
 		return roomID;
 	}
 
-	public void setRoomID(int roomID) {
+	public void setRoomID(String roomID) {
 		this.roomID = roomID;
 	}
 
@@ -50,90 +53,151 @@ public class MovieSession extends Entity{
 	}
 	
 	public String addSession(MovieSession ms) throws SQLException, Exception {
-	    return update("INSERT INTO MovieSession"
+		Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
+		Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/csit314?user=root&password=112899");
+		
+	    Statement stmt = conn.createStatement();
+	    
+	    stmt.executeUpdate("INSERT INTO MovieSession "
 				+ "values (" + ms.roomID + ", '" 
 				+ ms.sessionTiming + "', " 
 				+ ms.movieID + ")");
+	         
+	    stmt.close();
+	    conn.close();
+	    
+	    return "Successful";
 	}
 	
-	public MovieSession retrieveSession(int roomID, String sessionTiming) throws SQLException, Exception{
-		ResultSet rs = query("SELECT * FROM MovieSession "
-				  		   + "WHERE RoomID = " + roomID
-				  		   + " AND SessionTiming = " + sessionTiming);
+	public String[] retrieveSession(String roomID, String sessionTiming) throws SQLException, Exception{
+		Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
+		Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/csit314?user=root&password=112899");
+		 
+	    Statement stmt = conn.createStatement();
+	         
+	    ResultSet rs = stmt.executeQuery("SELECT * FROM MovieSession"
+		  		   + " WHERE RoomID = " + roomID
+		  		   + " AND SessionTiming = '" + sessionTiming + "'");
 
 		rs.next();
 
-		return new MovieSession(rs.getInt("RoomID"), rs.getString("SessionTiming"), rs.getInt("MovieID"));
+		return new String[] {rs.getString("RoomID"), rs.getString("SessionTiming"), rs.getString("MovieID")};
 	}
 	
 	public String updateSession(MovieSession ms) throws SQLException, Exception {
-	    return update("UPDATE MovieSession "
-         	 		+ "SET MovieID = " + ms.movieID
-         	 		+ " WHERE RoomID = " + ms.roomID
-         	 		+ " AND SessionTiming = " + ms.sessionTiming);
-	}
-	
-	public String deleteSession(int roomID, String sessionTiming) throws SQLException, Exception {
-	    return update("DELETE FROM MovieSession "
-				 	+ "WHERE RoomID = " + roomID 
-				 	+ "AND SessionTiming = '" + sessionTiming + "'");
-	}
-	
-	public ArrayList<MovieSession> searchSession(int movieID) throws SQLException, Exception{	         
-	    ArrayList<MovieSession> sessionArr = new ArrayList<>();
+		Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
+		Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/csit314?user=root&password=112899");
 		
-		ResultSet rs = query("SELECT * FROM MovieSession "
-	         			   + "WHERE movieID = " + movieID);
+	    Statement stmt = conn.createStatement();
+	    
+	    stmt.executeUpdate("UPDATE MovieSession "
+     	 		+ "SET MovieID = " + ms.movieID
+     	 		+ " WHERE RoomID = " + ms.roomID
+     	 		+ " AND SessionTiming = " + ms.sessionTiming);
+	         
+	    stmt.close();
+	    conn.close();
+	    
+	    return "Successful";
+	}
+	
+	public String deleteSession(String roomID, String sessionTiming) throws SQLException, Exception {
+		Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
+		Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/csit314?user=root&password=112899");
+		
+	    Statement stmt = conn.createStatement();
+	    
+	    stmt.executeUpdate("DELETE FROM MovieSession "
+			 	+ "WHERE RoomID = " + roomID 
+			 	+ " AND SessionTiming = '" + sessionTiming + "'");
+	         
+	    stmt.close();
+	    conn.close();
+	    
+	    return "Successful";
+	}
+	
+	public ArrayList<String[]> searchSession(String movieID) throws SQLException, Exception{	         
+	    ArrayList<String[]> sessionArr = new ArrayList<>();
+		
+	    Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
+		Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/csit314?user=root&password=112899");
+		 
+	    Statement stmt = conn.createStatement();
+	         
+	    ResultSet rs = stmt.executeQuery("SELECT * FROM MovieSession "
+  			   + "WHERE movieID = " + movieID);
 	    
 	    while(rs.next())
-		    sessionArr.add(new MovieSession(rs.getInt("RoomID"), rs.getString("SessionTiming"), rs.getInt("MovieID")));
+		    sessionArr.add(new String[]{rs.getString("RoomID"), rs.getString("SessionTiming"), rs.getString("MovieID")});
 	    
 	    return sessionArr;
 	}
 	
 	public ResultSet[] getConflictCheckData(MovieSession ms) throws SQLException, Exception{
-		ResultSet rsBef = query("SELECT MovieID, CAST(SessionTiming AS TIME) as Time"
-				+ "FROM MovieSession"
-				+ "WHERE SessionTiming < '" + ms.sessionTiming + "' "
+	    Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
+		Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/csit314?user=root&password=112899");
+		 
+	    Statement stmtBef = conn.createStatement();
+	    Statement stmtAft = conn.createStatement();
+		
+		ResultSet rsBef = stmtBef.executeQuery("SELECT MovieID, SessionTiming "
+				+ "FROM MovieSession "
+				+ "WHERE SessionTiming <= '" + ms.sessionTiming + "' "
 				+ "AND RoomID = " + ms.roomID + " "
-				+ "ORDER BY Time DESC"
+				+ "ORDER BY SessionTiming DESC "
 				+ "LIMIT 1");
 		
-		ResultSet rsAft = query("SELECT MovieID, CAST(SessionTiming AS TIME) as Time"
-				+ "FROM MovieSession"
-				+ "WHERE SessionTiming > '" + ms.sessionTiming + "' "
+		ResultSet rsAft = stmtAft.executeQuery("SELECT MovieID, SessionTiming "
+				+ "FROM MovieSession "
+				+ "WHERE SessionTiming >= '" + ms.sessionTiming + "' "
 				+ "AND RoomID = " + ms.roomID + " "
-				+ "ORDER BY Time ASC"
+				+ "ORDER BY SessionTiming ASC "
 				+ "LIMIT 1");
 		
 		return new ResultSet[]{rsBef, rsAft};
 	}
 	
-	public ResultSet getShowingMovieCheckData(int id) throws SQLException, Exception{
-		return query("SELECT * FROM MovieSession "
+	public ResultSet getShowingMovieCheckData(String id) throws SQLException, Exception{
+		Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
+		Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/csit314?user=root&password=112899");
+		 
+	    Statement stmt = conn.createStatement();
+		
+		return stmt.executeQuery("SELECT MovieID FROM MovieSession "
 				   + "WHERE MovieID = " + id);
 	}
 	
-	public ResultSet getInUseRoomCheckData(int id) throws SQLException, Exception{
-		return query("SELECT * FROM MovieSession "
+	public ResultSet getInUseRoomCheckData(String id) throws SQLException, Exception{
+		Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
+		Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/csit314?user=root&password=112899");
+		 
+	    Statement stmt = conn.createStatement();
+		
+		return stmt.executeQuery("SELECT RoomID FROM MovieSession "
 				   + "WHERE RoomID = " + id);
 	}
 	
-	public ArrayList<MovieSession> getMovieSessionList() throws SQLException, Exception{
-		ArrayList<MovieSession> sessionArr = new ArrayList<>();
+	public ArrayList<String[]> getSessionList() throws SQLException, Exception{
+		ArrayList<String[]> sessionArr = new ArrayList<>();
+		
+		Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
+		Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/csit314?user=root&password=112899");
+		 
+	    Statement stmt = conn.createStatement();
 
-	    ResultSet rs = query("SELECT * FROM Movie");
+	    ResultSet rs = stmt.executeQuery("SELECT * FROM MovieSession");
 	    
 	    while(rs.next())
-	    	sessionArr.add(new MovieSession(rs.getInt("RoomID"), rs.getString("SessionTiming"), rs.getInt("MovieID")));
+	    	sessionArr.add(new String[] {rs.getString("RoomID"), rs.getString("SessionTiming"), rs.getString("MovieID")});
 	    
 	    return sessionArr;
 	}
 	
 	@Override
 	public String toString() {
-		return String.format("Movie ID: %d%n"
-						   + "Room ID: %d%n"
+		return String.format("Movie ID: %s%n"
+						   + "Room ID: %s%n"
 						   + "Session Timing: %s%n", this.movieID, this.roomID, this.sessionTiming);
 	}
 	

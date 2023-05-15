@@ -10,27 +10,26 @@ import java.awt.event.ActionListener;
 import java.sql.SQLException;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-import controller.RetrieveMovieController;
-import controller.UpdateMovieController;
+import controller.RetrieveCinemaRoomController;
+import controller.UpdateCinemaRoomController;
 
-public class UpdateMovieBoundary {
-	private final RetrieveMovieController rmc = new RetrieveMovieController();
-	private final UpdateMovieController umc = new UpdateMovieController();
+public class UpdateCinemaRoomBoundary {
+	private final RetrieveCinemaRoomController rcrc = new RetrieveCinemaRoomController();
+	private final UpdateCinemaRoomController ucrc = new UpdateCinemaRoomController();
 	
 	public JPanel constructBoundary(JDialog dialog, String id){
 		JPanel panel = new JPanel(new GridBagLayout());
 		
 		try {
-			if(umc.checkShowingMovie(id)) {
-				JOptionPane.showMessageDialog(dialog, "Cannot update showing movie\n\nPlease delete the session first", "Alert", JOptionPane.WARNING_MESSAGE);
+			if(ucrc.checkInUseRoom(id)) {
+				JOptionPane.showMessageDialog(dialog, "Cannot update in use room\n\nPlease delete the session first", "Alert", JOptionPane.WARNING_MESSAGE);
 				
 				return null;
 			}
@@ -52,21 +51,17 @@ public class UpdateMovieBoundary {
 		nameLabel.setFont(new Font("Arial", Font.PLAIN, 25));
 		nameLabel.setHorizontalAlignment(JLabel.CENTER);
 					
-		JLabel genreLabel = new JLabel("Genre:");
-		genreLabel.setFont(new Font("Arial", Font.PLAIN, 25));
-		genreLabel.setHorizontalAlignment(JLabel.CENTER);
+		JLabel capacityLabel = new JLabel("Capacity:");
+		capacityLabel.setFont(new Font("Arial", Font.PLAIN, 25));
+		capacityLabel.setHorizontalAlignment(JLabel.CENTER);
 					
-		JLabel durationLabel = new JLabel("Duration:");
-		durationLabel.setFont(new Font("Arial", Font.PLAIN, 25));
-		durationLabel.setHorizontalAlignment(JLabel.CENTER);
-					
-		JLabel descriptionLabel = new JLabel("Description:");
-		descriptionLabel.setFont(new Font("Arial", Font.PLAIN, 25));
-		descriptionLabel.setHorizontalAlignment(JLabel.CENTER);
+		JLabel stateLabel = new JLabel("State:");
+		stateLabel.setFont(new Font("Arial", Font.PLAIN, 25));
+		stateLabel.setHorizontalAlignment(JLabel.CENTER);
 		
 		String[] data = new String[] {};
 		try {
-			data = rmc.executeTask(id);
+			data = rcrc.executeTask(id);
 			
 		} catch (SQLException e) {
 			JOptionPane.showMessageDialog(dialog, "Database Error", "Alert", JOptionPane.WARNING_MESSAGE);
@@ -82,18 +77,13 @@ public class UpdateMovieBoundary {
 		JTextField nameField = new JTextField(data[1], 8);
 		nameField.setFont(new Font("Arial", Font.PLAIN, 25));
 			
-		JTextField genreField = new JTextField(data[3], 8);
-		genreField.setFont(new Font("Arial", Font.PLAIN, 25));
+		JTextField capacityField = new JTextField(data[2], 8);
+		capacityField.setFont(new Font("Arial", Font.PLAIN, 25));
 					
-		JTextField durationField = new JTextField(data[4], 8);
-		durationField.setFont(new Font("Arial", Font.PLAIN, 25));
-		
-		JTextArea descriptionArea = new JTextArea(data[2], 5, 11);
-		descriptionArea.setFont(new Font("Arial", Font.PLAIN, 20));
-		descriptionArea.setLineWrap(true);
-		descriptionArea.setWrapStyleWord(true);
-		
-		JScrollPane descriptionScroll = new JScrollPane(descriptionArea);
+		JComboBox<String> stateCombo = new JComboBox<>(new String[] {"Available", "Not Available (Maintenance)", 
+				   "Not Available (Renovation)", "Not Available (Other)"});
+		stateCombo.setFont(new Font("Arial", Font.PLAIN, 25));
+		stateCombo.setSelectedItem(data[3]);
 		
 		JButton cancelButton = new JButton("Cancel");
 		cancelButton.setFont(new Font("Arial", Font.BOLD, 25));
@@ -113,22 +103,21 @@ public class UpdateMovieBoundary {
 			
 			@Override
 			public void actionPerformed(ActionEvent evt){
-				if(!umc.validateInput(durationField.getText())) {							
-					JOptionPane.showMessageDialog(dialog, "Invalid Duration input", "Alert", JOptionPane.WARNING_MESSAGE);
+				if(!ucrc.validateInput(capacityField.getText())) {							
+					JOptionPane.showMessageDialog(dialog, "Invalid Capacity input", "Alert", JOptionPane.WARNING_MESSAGE);
 								
 				} else {
 					try {
-						JOptionPane.showMessageDialog(dialog, umc.executeTask(id, nameField.getText(), descriptionArea.getText(), 
-																genreField.getText(), Integer.parseInt(durationField.getText())));
-						
+						JOptionPane.showMessageDialog(dialog, ucrc.executeTask(id, nameField.getText(), 
+													 Integer.parseInt(capacityField.getText()), (String) (stateCombo.getSelectedItem())));
+							
 						dialog.setVisible(false);
-										
+											
 					} catch (SQLException e) {
 						JOptionPane.showMessageDialog(dialog, "Database Error", "Alert", JOptionPane.WARNING_MESSAGE);
 									
 					} catch (Exception e) {
 						JOptionPane.showMessageDialog(dialog, "Unknown Error", "Alert", JOptionPane.WARNING_MESSAGE);
-
 					}
 				}
 			}
@@ -150,24 +139,17 @@ public class UpdateMovieBoundary {
 		
 		gbc.gridx--;
 		gbc.gridy++;
-		panel.add(genreLabel, gbc);
+		panel.add(capacityLabel, gbc);
 		
 		gbc.gridx++;
-		panel.add(genreField, gbc);
+		panel.add(capacityField, gbc);
 		
 		gbc.gridx--;
 		gbc.gridy++;
-		panel.add(durationLabel, gbc);
+		panel.add(stateLabel, gbc);
 		
 		gbc.gridx++;
-		panel.add(durationField, gbc);
-		
-		gbc.gridx--;
-		gbc.gridy++;
-		panel.add(descriptionLabel, gbc);
-		
-		gbc.gridx++;
-		panel.add(descriptionScroll, gbc);
+		panel.add(stateCombo, gbc);
 		
 		gbc.gridy++;
 		gbc.gridx--;

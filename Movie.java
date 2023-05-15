@@ -1,11 +1,14 @@
 package entity;
 
 import java.util.ArrayList;
+import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
-public class Movie extends Entity{
-	private int id;
+public class Movie{
+	private String id;
 	private String name;
 	private String description;
 	private String genre;
@@ -13,7 +16,7 @@ public class Movie extends Entity{
 	
 	public Movie() {}
 	
-	public Movie(int id, String name, String description, String genre, int duration) {
+	public Movie(String id, String name, String description, String genre, int duration) {
 		this.id = id;
 		this.name = name;
 		this.description = description;
@@ -22,18 +25,18 @@ public class Movie extends Entity{
 	}
 	
 	public Movie(String name, String description, String genre, int duration) {
-		this(-1, name, description, genre, duration);
+		this(null, name, description, genre, duration);
 	}
 
 	public Movie(Movie m) {
 		this(m.id, m.name, m.description, m.genre, m.duration);
 	}
 
-	public int getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
@@ -70,51 +73,106 @@ public class Movie extends Entity{
 	}
 	
 	public String addMovie(Movie m) throws SQLException, Exception {
-	    return update("INSERT INTO Movie (Name, Description, Genre, Duration)"
-					+ "values ('" + m.name 
-					+ "', '" + m.description 
-					+ "', '" + m.genre
-					+ "', " + m.duration + ")");
+		Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
+		Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/csit314?user=root&password=112899");
+		
+	    Statement stmt = conn.createStatement();
+	    
+	    stmt.executeUpdate("INSERT INTO Movie (Name, Description, Genre, Duration)"
+				+ "values ('" + m.name 
+				+ "', '" + m.description 
+				+ "', '" + m.genre
+				+ "', " + m.duration + ")");
+	         
+	    stmt.close();
+	    conn.close();
+		
+	    return "Successful";
 	}
 	
-	public Movie retrieveMovie(int id) throws SQLException, Exception {
-		ResultSet rs = query("SELECT * FROM Movie "
+	public String[] retrieveMovie(String id) throws SQLException, Exception {
+		Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
+		Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/csit314?user=root&password=112899");
+		
+	    Statement stmt = conn.createStatement();
+		
+		ResultSet rs = stmt.executeQuery("SELECT * FROM Movie "
 									  + "WHERE ID = " + id);
 		
 	    rs.next();
 	    
-	    return new Movie(rs.getInt("ID"), rs.getString("Name"), 
-	    				 rs.getString("Description"), rs.getString("Genre"), rs.getInt("Duration"));
+	    return new String[] {rs.getString("ID"), rs.getString("Name"), 
+				 rs.getString("Description"), rs.getString("Genre"), rs.getString("Duration")};
+	}
+
+	public String updateMovie(Movie m) throws SQLException, Exception {
+		Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
+		Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/csit314?user=root&password=112899");
+		
+	    Statement stmt = conn.createStatement();
+	    
+	    stmt.executeUpdate("UPDATE Movie "
+         	 	+ "SET Name = '" + m.name 
+         	 	+ "', Description = '" + m.description 
+         	 	+ "', Genre = '" + m.genre
+         	 	+ "', Duration = " + m.duration
+         	 	+ " WHERE ID = " + m.id);
+	         
+	    stmt.close();
+	    conn.close();
+	    
+	    return "Successful";
+
 	}
 	
-	public String updateMovie(Movie m) throws SQLException, Exception {	    
-	    return update("UPDATE Movie "
-	         	 	+ "SET Name = '" + m.name 
-	         	 	+ "', Description = '" + m.description 
-	         	 	+ "', Genre = '" + m.genre
-	         	 	+ "', Duration = " + m.duration
-	         	 	+ " WHERE ID = " + m.id);
+	public String deleteMovie(String id) throws SQLException, Exception {
+		Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
+		Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/csit314?user=root&password=112899");
+		
+	    Statement stmt = conn.createStatement();
+		
+	    stmt.executeUpdate("DELETE FROM Movie"
+	    			+ " WHERE ID = " + id);
+	    
+	    return "Successful";
 	}
 	
-	public String deleteMovie(int id) throws SQLException, Exception {
-	    return update("DELETE FROM Movie "
-	         	 	+ "WHERE ID = " + id);
-	}
-	
-	public Movie searchMovie(String name) throws SQLException, Exception{
-	    ResultSet rs = query("SELECT * FROM Movie "
+	public String[] searchMovie(String name) throws SQLException, Exception{
+		Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
+		Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/csit314?user=root&password=112899");
+		
+	    Statement stmt = conn.createStatement();
+	    
+	    ResultSet rs = stmt.executeQuery("SELECT * FROM Movie "
 	         			   + "WHERE Name = '" + name + "'");
 	    
 	    if(rs.next()) 
-		    return new Movie(rs.getInt("ID"), rs.getString("Name"), 
-		    				 rs.getString("Description"), rs.getString("Genre"), rs.getInt("Duration"));
+		    return new String[] {rs.getString("ID"), rs.getString("Name"), 
+		    				 rs.getString("Description"), rs.getString("Genre"), rs.getString("Duration")};
 	    else
-	    	return new Movie();
+	    	return new String[] {};
 	    
 	}
 	
+	public ResultSet getMovieIdCheckData(String input) throws SQLException, Exception{
+		Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
+		Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/csit314?user=root&password=112899");
+		
+	    Statement stmt = conn.createStatement();
+	    
+	    ResultSet rs = stmt.executeQuery("SELECT ID FROM Movie"
+	    							   + " WHERE ID = " + input);
+	    
+	    return rs;
+	}
+	
 	public ResultSet getDuplicateMovieCheckData(Movie m) throws SQLException, Exception{
-	    ResultSet rs = query("SELECT Name, Description, Genre FROM Movie "
+		Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
+		Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/csit314?user=root&password=112899");
+		
+	    Statement stmt = conn.createStatement();
+	    
+	    ResultSet rs = stmt.executeQuery("SELECT ID FROM Movie "
 		    			   + "WHERE Name = '" + m.name + "' "
 		    			   + "AND Description = '" + m.description + "' "
 		    			   + "AND Genre = '" + m.genre + "' "
@@ -123,21 +181,25 @@ public class Movie extends Entity{
 	    return rs;
 	}
 	
-	public ArrayList<Movie> getMovieList() throws SQLException, Exception{
-		ArrayList<Movie> movieArr = new ArrayList<>();
+	public ArrayList<String[]> getMovieList() throws SQLException, Exception{
+		ArrayList<String[]> movieArr = new ArrayList<>();
+		
+		Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
+		Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/csit314?user=root&password=112899");
+		
+	    Statement stmt = conn.createStatement();
 	         
-	    ResultSet rs = query("SELECT * FROM Movie");
+	    ResultSet rs = stmt.executeQuery("SELECT ID, Name FROM Movie");
 	    
 	    while(rs.next())
-	    	movieArr.add(new Movie(rs.getInt("ID"), rs.getString("Name"), 
-	    						   rs.getString("Description"), rs.getString("Genre"), rs.getInt("Duration")));
+	    	movieArr.add(new String[] {rs.getString("ID"), rs.getString("Name")});
 	    
 	    return movieArr;
 	}
 	
 	@Override
 	public String toString() {
-		return String.format("ID: %d%n"
+		return String.format("ID: %s%n"
 						   + "Name: %s%n"
 						   + "Description: %s%n"
 						   + "Genre: %s%n"

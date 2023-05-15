@@ -12,6 +12,7 @@ import java.sql.SQLException;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JButton;
@@ -30,18 +31,18 @@ public class CreateMovieBoundary{
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.insets= new Insets(15, 15, 15, 15);
 		
-		String input = JOptionPane.showInputDialog(null, "Enter the number of movies you want to enter");
+		String input = JOptionPane.showInputDialog(dialog, "Enter the number of movies you want to enter");
 		
 		if(input == null)
-			return new JPanel();
+			return null;
 			
 		while(!cmc.validateInput(input)) {
-			JOptionPane.showMessageDialog(null, "Invalid input", "Alert", JOptionPane.WARNING_MESSAGE);
+			JOptionPane.showMessageDialog(dialog, "Invalid input", "Alert", JOptionPane.WARNING_MESSAGE);
 			
-			input = JOptionPane.showInputDialog(null, "Enter the number of movies you want to enter");
+			input = JOptionPane.showInputDialog(dialog, "Enter the number of movies you want to enter");
 			
 			if(null == input)
-				return new JPanel();
+				return null;
 		}
 		num = Integer.parseInt(input);
 							
@@ -72,11 +73,15 @@ public class CreateMovieBoundary{
 		
 		JTextArea descriptionArea = new JTextArea(5, 11);
 		descriptionArea.setFont(new Font("Arial", Font.PLAIN, 20));
-					
-		JButton enterButtonIn = new JButton("Enter");
-		enterButtonIn.setFont(new Font("Arial", Font.BOLD, 25));
-		enterButtonIn.setPreferredSize(new Dimension(125, 50));
-		enterButtonIn.addActionListener(new ActionListener() {
+		descriptionArea.setLineWrap(true);
+		descriptionArea.setWrapStyleWord(true);
+		
+		JScrollPane descriptionScroll = new JScrollPane(descriptionArea);
+
+		JButton enterButton = new JButton("Enter");
+		enterButton.setFont(new Font("Arial", Font.BOLD, 25));
+		enterButton.setPreferredSize(new Dimension(125, 50));
+		enterButton.addActionListener(new ActionListener() {
 						
 			@Override
 			public void actionPerformed(ActionEvent evt){
@@ -84,11 +89,16 @@ public class CreateMovieBoundary{
 					JOptionPane.showMessageDialog(dialog, "Invalid Duration input", "Alert", JOptionPane.WARNING_MESSAGE);
 								
 				} else {
-					num--;
-					
 					try {
-						JOptionPane.showMessageDialog(dialog, cmc.executeTask(nameField.getText(), descriptionArea.getText(), 
-															genreField.getText(), Integer.parseInt(durationField.getText())));
+						String result = cmc.executeTask(nameField.getText(), descriptionArea.getText(), 
+								genreField.getText(), Integer.parseInt(durationField.getText()));
+						
+						if(result.equals("Successful")) {
+							JOptionPane.showMessageDialog(dialog, result);
+							num--;
+						} else {
+							JOptionPane.showMessageDialog(dialog, result, "Alert", JOptionPane.WARNING_MESSAGE);
+						}
 						
 						nameField.setText("");
 						genreField.setText("");
@@ -136,10 +146,10 @@ public class CreateMovieBoundary{
 		panel.add(descriptionLabel, gbc);
 					
 		gbc.gridx++;
-		panel.add(descriptionArea, gbc);
+		panel.add(descriptionScroll, gbc);
 					
 		gbc.gridy++;
-		panel.add(enterButtonIn, gbc);
+		panel.add(enterButton, gbc);
 		
 		return panel;
 	}
