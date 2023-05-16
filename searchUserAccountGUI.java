@@ -4,8 +4,6 @@ import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import userAccount.userAccount;
@@ -396,8 +394,7 @@ public class searchUserAccountGUI extends javax.swing.JFrame {
         int row = list.getSelectedRow();
         int column = 0;
         var UID1 = (int)list.getValueAt(row, column);
-        retrieveUserAccountGUI rua = new retrieveUserAccountGUI ();
-        rua.recieve(UID1);
+        retrieveUserAccountGUI rua = new retrieveUserAccountGUI (UID1);
         rua.setVisible(true);
         dispose();
     }//GEN-LAST:event_selectActionPerformed

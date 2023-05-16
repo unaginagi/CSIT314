@@ -1,12 +1,11 @@
 
-import Control.updateUserAccountControl;
+import Control.createCustomerAccountControl;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import javax.swing.JOptionPane;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 
 /*
@@ -19,24 +18,14 @@ import java.util.Date;
  *
  * @author Aug20 PF2AM-MZY
  */
-public class updateUserAccountGUI extends javax.swing.JFrame {
+public class createCustomerAccountGUI extends javax.swing.JFrame {
 
     /**
      * Creates new form createUserAccountGUI
      */
+    createCustomerAccountControl uac1 = new createCustomerAccountControl ();
     
-    
-    int ID;
-    String nameValue;
-    String userValue;
-    String passwordValue;
-    String DOBValue;
-    String emailValue;
-    int phoneValue;
-    String addressValue;
-    updateUserAccountControl uac1 = new updateUserAccountControl ();
-    
-    public updateUserAccountGUI() {
+    public createCustomerAccountGUI() {
         initComponents();
         phone.addKeyListener(new KeyAdapter() {
          @Override
@@ -79,8 +68,8 @@ public class updateUserAccountGUI extends javax.swing.JFrame {
         day = new javax.swing.JComboBox<>();
         month = new javax.swing.JComboBox<>();
         year = new javax.swing.JComboBox<>();
-        update = new javax.swing.JButton();
-        cancel = new javax.swing.JButton();
+        create = new javax.swing.JButton();
+        back = new javax.swing.JButton();
 
         jButton2.setText("Create");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -89,7 +78,7 @@ public class updateUserAccountGUI extends javax.swing.JFrame {
             }
         });
 
-        create1.setText("Update");
+        create1.setText("Create");
         create1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 create1ActionPerformed(evt);
@@ -132,24 +121,24 @@ public class updateUserAccountGUI extends javax.swing.JFrame {
             }
         });
 
-        year.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1990", "1991", "1992", "1993", "1994", "1995", "1996", "1997", "1998", "1999", "2000", "2001", "2002", "2003", "2004", "2005", "2006", "2007", "2008", "2009", "2010" }));
+        year.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1990", "1991", "1992", "1993", "1994", "1995", "1996", "1997", "1998", "1999", "2000", "2001", "2002", "2003", "2004", "2005", "2006", "2007", "2008", "2009", "2010", "2011", "2012", "2013", "2014", "2015" }));
         year.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 yearActionPerformed(evt);
             }
         });
 
-        update.setText("Update");
-        update.addActionListener(new java.awt.event.ActionListener() {
+        create.setText("Create");
+        create.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                updateActionPerformed(evt);
+                createActionPerformed(evt);
             }
         });
 
-        cancel.setText("Cancel");
-        cancel.addActionListener(new java.awt.event.ActionListener() {
+        back.setText("Back");
+        back.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cancelActionPerformed(evt);
+                backActionPerformed(evt);
             }
         });
 
@@ -183,23 +172,23 @@ public class updateUserAccountGUI extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(user, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(day, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(month, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(year, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(name, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addContainerGap(61, Short.MAX_VALUE))
+                                .addComponent(name, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(day, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(month, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(12, 12, 12)
+                                .addComponent(year, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addContainerGap(51, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(update, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cancel, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(24, 24, 24))))
+                        .addComponent(create, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(back, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(40, 40, 40))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -236,8 +225,8 @@ public class updateUserAccountGUI extends javax.swing.JFrame {
                     .addComponent(address, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(update)
-                    .addComponent(cancel))
+                    .addComponent(create)
+                    .addComponent(back))
                 .addContainerGap(26, Short.MAX_VALUE))
         );
 
@@ -249,61 +238,20 @@ public class updateUserAccountGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_dayActionPerformed
 
     private void monthActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_monthActionPerformed
-        // TODO add your handling code here:
+
     }//GEN-LAST:event_monthActionPerformed
 
     private void yearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_yearActionPerformed
-        // TODO add your handling code here:
+
     }//GEN-LAST:event_yearActionPerformed
 
     private void userActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_userActionPerformed
-        
-    }//GEN-LAST:event_userActionPerformed
-
-    private void displayMsg()
-    {
-        JOptionPane.showMessageDialog(null, "Succesfull");
-        retrieveUserAccountGUI rua = new retrieveUserAccountGUI(ID);
-        rua.setVisible(true);
-        dispose();
-    }
-    
-    private void displayErrorMsg()
-    {
-        JOptionPane.showMessageDialog(null, "Error.");
-    }
-    
-    public void recieve (int UID1, String name1, String user1, String pass1, String DOB1, String email1,
-                           int phone1, String address1)
-    {
-        try {
-            name.setText(name1);
-            user.setText(user1);
-            pass.setText(pass1);
-            SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
-            Date parsed = format.parse(DOB1);
-            Calendar c = Calendar.getInstance();
-            c.setTime(parsed);
-            day.setSelectedItem(c.get(Calendar.DAY_OF_WEEK));
-            month.setSelectedItem(c.get(Calendar.MONTH));
-            year.setSelectedItem(c.get(Calendar.YEAR));
-            email.setText(email1);
-            phone.setText(String.valueOf(phone1));
-            address.setText(address1);
-            
-        } catch (ParseException ex) {
-            displayErrorMsg();
-        }
-        
-    }
-    
-    private void updateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateActionPerformed
-        if (evt.getSource() == update)
+        if (evt.getSource() == create)
         {
             try {
                 String namevalue = name.getText();
                 String datevalue = (String)year.getSelectedItem() + (String)month.getSelectedItem() +
-                            (String)day.getSelectedItem();
+                        (String)day.getSelectedItem();
                 SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
                 Date parsed = format.parse(datevalue);
                 java.sql.Date DOB = new java.sql.Date(parsed.getTime());
@@ -311,9 +259,9 @@ public class updateUserAccountGUI extends javax.swing.JFrame {
                 String passvalue = pass.getText();
                 int phonevalue = Integer.parseInt(phone.getText());
                 String emailvalue = email.getText();
-                String addressvalue = address.getText();;
-                boolean x = uac1.updateUserAccount(ID, namevalue, DOB, 
-                            uservalue, passvalue, phonevalue, emailvalue, addressvalue);
+                String addressvalue = address.getText();
+                boolean x = uac1.createUserAccount(namevalue, DOB, uservalue,
+                            passvalue, phonevalue, emailvalue, addressvalue);
                 if (x == false)
                 {
                     displayErrorMsg();
@@ -323,12 +271,61 @@ public class updateUserAccountGUI extends javax.swing.JFrame {
                     displayMsg();
                 }
             }
-    // TODO add your handling code here:
+// TODO add your handling code here:
             catch (ParseException | SQLException | ClassNotFoundException ex) {
-                    displayErrorMsg();
+                displayErrorMsg();
             }
+            
         }
-    }//GEN-LAST:event_updateActionPerformed
+    }//GEN-LAST:event_userActionPerformed
+
+    private void displayMsg()
+    {
+        JOptionPane.showMessageDialog(null, "Succesfull");
+        searchUserAccountGUI sua = new searchUserAccountGUI ();
+        sua.setVisible(true);
+        dispose();
+        
+    }
+    
+    private void displayErrorMsg()
+    {
+        JOptionPane.showMessageDialog(null, "Error.");
+    }
+    
+    private void createActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createActionPerformed
+        if (evt.getSource() == create)
+        {
+            try {
+                String namevalue = name.getText();
+                String datevalue = (String)year.getSelectedItem() + (String)month.getSelectedItem() +
+                        (String)day.getSelectedItem();
+                SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
+                Date parsed = format.parse(datevalue);
+                java.sql.Date DOB = new java.sql.Date(parsed.getTime());
+                String uservalue = user.getText();
+                String passvalue = pass.getText();
+                int phonevalue = Integer.parseInt(phone.getText());
+                String emailvalue = email.getText();
+                String addressvalue = address.getText();
+                boolean x = uac1.createUserAccount(namevalue, DOB, uservalue,
+                            passvalue, phonevalue, emailvalue, addressvalue);
+                if (x == false)
+                {
+                    displayErrorMsg();
+                }
+                else
+                {
+                    displayMsg();
+                }
+            }
+// TODO add your handling code here:
+            catch (ParseException | SQLException | ClassNotFoundException ex) {
+                displayErrorMsg();
+            }
+            
+        }
+    }//GEN-LAST:event_createActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
@@ -338,12 +335,12 @@ public class updateUserAccountGUI extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_create1ActionPerformed
 
-    private void cancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelActionPerformed
-        // TODO add your handling code here
-        retrieveUserAccountGUI rua = new retrieveUserAccountGUI(ID);
-        rua.setVisible(true);
+    private void backActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backActionPerformed
+        // TODO add your handling code here:
+        searchUserAccountGUI sua = new searchUserAccountGUI ();
+        sua.setVisible(true);
         dispose();
-    }//GEN-LAST:event_cancelActionPerformed
+    }//GEN-LAST:event_backActionPerformed
 
     /**
      * @param args the command line arguments
@@ -382,7 +379,8 @@ public class updateUserAccountGUI extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField address;
-    private javax.swing.JButton cancel;
+    private javax.swing.JButton back;
+    private javax.swing.JButton create;
     private javax.swing.JButton create1;
     private javax.swing.JComboBox<String> day;
     private javax.swing.JTextField email;
@@ -398,7 +396,6 @@ public class updateUserAccountGUI extends javax.swing.JFrame {
     private javax.swing.JTextField name;
     private javax.swing.JTextField pass;
     private javax.swing.JTextField phone;
-    private javax.swing.JButton update;
     private javax.swing.JTextField user;
     private javax.swing.JComboBox<String> year;
     // End of variables declaration//GEN-END:variables

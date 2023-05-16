@@ -77,10 +77,19 @@ public class userAccount
             int phoneNo1 = rset.getInt("phoneNo");
             String emai1l = rset.getString("email");
             String address1 = rset.getString("address");
-            boolean suspended1 = rset.getBoolean("suspended");
+            int suspended1 = rset.getInt("suspended");
+            boolean suspended2;
+            if (suspended1 == 1)
+            {
+                suspended2 = true;
+            }
+            else
+            {
+                suspended2 = false;
+            }
 
             userAccount output = new userAccount (UID, name1, DOB1, user1, password1,
-                                                 phoneNo1, emai1l, address1, suspended1);
+                                                 phoneNo1, emai1l, address1, suspended2);
       
             return output;
         }
@@ -124,8 +133,7 @@ public class userAccount
             Connection myCon = DriverManager.getConnection (URL + "csit314",  "", "");
             
             PreparedStatement myStmt; 
-            myStmt = myCon.prepareStatement("Update userAccount SET suspended = " + true 
-                                            + "WHERE UID = " + UID);
+            myStmt = myCon.prepareStatement("Update userAccount SET suspended = 1 WHERE UID = " + UID);
             ResultSet rset = myStmt.executeQuery();
             
             return true;
@@ -214,10 +222,18 @@ public class userAccount
                 int phoneNo1 = rset.getInt("phoneNo");
                 String email1 = rset.getString("email");
                 String address1 = rset.getString("address");
-                boolean suspended1 = rset.getBoolean("suspended");
-
+                int suspended1 = rset.getInt("suspended");
+                boolean suspended2;
+                if (suspended1 != 1)
+                {
+                    suspended2 = false;
+                }
+                else
+                {
+                    suspended2 = true;
+                }
                 userAccount output = new userAccount (UID1, name1, DOB1, user1, password1,
-                                                    phoneNo1, email1, address1, suspended1);
+                                                    phoneNo1, email1, address1, suspended2);
                 searched = addX(searched.length, searched, output);
             }
             return searched;

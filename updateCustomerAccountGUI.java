@@ -1,5 +1,5 @@
 
-import Control.updateUserAccountControl;
+import Control.updateCustomerAccountControl;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import javax.swing.JOptionPane;
@@ -19,7 +19,7 @@ import java.util.Date;
  *
  * @author Aug20 PF2AM-MZY
  */
-public class updateUserAccountGUI extends javax.swing.JFrame {
+public class updateCustomerAccountGUI extends javax.swing.JFrame {
 
     /**
      * Creates new form createUserAccountGUI
@@ -34,9 +34,9 @@ public class updateUserAccountGUI extends javax.swing.JFrame {
     String emailValue;
     int phoneValue;
     String addressValue;
-    updateUserAccountControl uac1 = new updateUserAccountControl ();
+    updateCustomerAccountControl uac1 = new updateCustomerAccountControl ();
     
-    public updateUserAccountGUI() {
+    public updateCustomerAccountGUI() {
         initComponents();
         phone.addKeyListener(new KeyAdapter() {
          @Override
@@ -340,7 +340,7 @@ public class updateUserAccountGUI extends javax.swing.JFrame {
 
     private void cancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelActionPerformed
         // TODO add your handling code here
-        retrieveUserAccountGUI rua = new retrieveUserAccountGUI(ID);
+        retrieveCustomerAccountGUI rua = new retrieveCustomerAccountGUI(ID);
         rua.setVisible(true);
         dispose();
     }//GEN-LAST:event_cancelActionPerformed

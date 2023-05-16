@@ -108,8 +108,7 @@ public class suspendUserAccountGUI extends javax.swing.JFrame {
             else 
             {
                 displayMsg();
-                retrieveUserAccountGUI rua = new retrieveUserAccountGUI();
-                rua.recieve(ID);
+                retrieveUserAccountGUI rua = new retrieveUserAccountGUI(ID);
                 rua.setVisible(true);
                 dispose();
             }
@@ -124,8 +123,7 @@ public class suspendUserAccountGUI extends javax.swing.JFrame {
 
     private void cancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelActionPerformed
         // TODO add your handling code here:
-        retrieveUserAccountGUI rua = new retrieveUserAccountGUI();
-        rua.recieve(ID);
+        retrieveUserAccountGUI rua = new retrieveUserAccountGUI(ID);
         rua.setVisible(true);
         dispose();
     }//GEN-LAST:event_cancelActionPerformed
@@ -133,8 +131,7 @@ public class suspendUserAccountGUI extends javax.swing.JFrame {
     private void displayMsg()
     {
         JOptionPane.showMessageDialog(null, "Succesfully Suspended");
-        retrieveUserAccountGUI rua = new retrieveUserAccountGUI();
-        rua.recieve(ID);
+        retrieveUserAccountGUI rua = new retrieveUserAccountGUI(ID);
         rua.setVisible(true);
         dispose();
     }
