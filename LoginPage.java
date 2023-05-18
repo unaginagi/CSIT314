@@ -16,9 +16,11 @@ public class LoginPage extends JFrame implements ActionListener {
     private JTextField usernameField;
     private JPasswordField passwordField;
     private JButton loginButton;
+    
+    public static boolean isLoggedin = false;
 
     public LoginPage() {
-        setTitle("Login Page");
+        setTitle("UNAGI Cinema");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(300, 200);
         setLocationRelativeTo(null);
@@ -48,18 +50,26 @@ public class LoginPage extends JFrame implements ActionListener {
         String password = new String(passwordField.getPassword());
 
         // Authentication Result
-        if (login(username, password)) {
+        if (LoginPageLogin(username, password)) {
             JOptionPane.showMessageDialog(this, "Login successful!");
+            
+            dispose();
+            //dashboard
+            SwingUtilities.invokeLater(() -> {
+            Dashboard dashboardFrame = new Dashboard();
+            dashboardFrame.setVisible(true);
+        });
+            
         } else {
             JOptionPane.showMessageDialog(this, "Invalid username or password.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
-    private boolean login(String username, String password) {
+    private boolean LoginPageLogin(String username, String password) {
         boolean isLoginSuccessful = false;
-//        isLoginSuccessful = UserAdminLoginController.login(username,password);
+        //isLoginSuccessful = UserAdminLoginController.login(username,password);
         try {
-            isLoginSuccessful = UserAdminLoginController.login(username,password);	
+            isLoginSuccessful = LoginController.login(username,password);
 	} catch (SQLException e) {
             JOptionPane.showMessageDialog(this, "Database Error", "Alert", JOptionPane.WARNING_MESSAGE);
 	} catch (Exception e) {
@@ -70,6 +80,16 @@ public class LoginPage extends JFrame implements ActionListener {
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(LoginPage::new);
+        /*
+        if(isLoggedin == true){
+            SwingUtilities.invokeLater(() -> {
+            Dashboard dashboardFrame = new Dashboard();
+            dashboardFrame.setVisible(true);
+        });
+        }else{
+        SwingUtilities.invokeLater(LoginPage::new);
+        }*/
+
     }
 }
 
