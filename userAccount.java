@@ -1,9 +1,6 @@
 package userAccount;
 
 import java.sql.*;
-import java.time.Year;
-import java.time.ZoneId;
-import java.util.Calendar;
 
 public class userAccount
 {
@@ -58,7 +55,6 @@ public class userAccount
         }
         catch (SQLException e )
         {
-            e.printStackTrace(System.out);
             return false;
         }
     }
@@ -358,4 +354,59 @@ public class userAccount
             return null;
         }
    }
+   
+    public boolean validateLogin(String username, String password) throws SQLException, Exception 
+    {
+       
+        String query = "SELECT COUNT(*) FROM useraccount WHERE user = ? AND password = ?";
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        boolean isValidLogin = false;
+        Connection myCon = null;
+    
+        try
+        {
+            
+            Class.forName("com.mysql.cj.jdbc.Driver");
+       
+            myCon = DriverManager.getConnection (URL, "admin", "admin");
+            statement = myCon.prepareStatement(query);
+            statement.setString(1, username);
+            statement.setString(2, password);
+            resultSet = statement.executeQuery();
+            
+            if (resultSet.next()) {
+                int count = resultSet.getInt(1);
+                return count > 0;
+            }
+        } 
+        catch (SQLException e) 
+        {
+            e.printStackTrace();
+        }
+        finally 
+        {
+        // Close the resources in the reverse order of their creation
+            try 
+            {
+                if (resultSet != null) 
+                {
+                    resultSet.close();
+                }
+                if (statement != null) 
+                {
+                    statement.close();
+                }
+                if (myCon != null) 
+                {
+                    myCon.close();
+                }
+        } 
+        catch (SQLException e) 
+        {
+            e.printStackTrace();
+        }
+    }
+        return isValidLogin;
+    }
 }
