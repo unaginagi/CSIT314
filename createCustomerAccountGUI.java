@@ -7,6 +7,9 @@ import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import userAccount.userAccount;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -246,42 +249,14 @@ public class createCustomerAccountGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_yearActionPerformed
 
     private void userActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_userActionPerformed
-        if (evt.getSource() == create)
-        {
-            try {
-                String namevalue = name.getText();
-                String datevalue = (String)year.getSelectedItem() + (String)month.getSelectedItem() +
-                        (String)day.getSelectedItem();
-                SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
-                Date parsed = format.parse(datevalue);
-                java.sql.Date DOB = new java.sql.Date(parsed.getTime());
-                String uservalue = user.getText();
-                String passvalue = pass.getText();
-                int phonevalue = Integer.parseInt(phone.getText());
-                String emailvalue = email.getText();
-                String addressvalue = address.getText();
-                boolean x = uac1.createUserAccount(namevalue, DOB, uservalue,
-                            passvalue, phonevalue, emailvalue, addressvalue);
-                if (x == false)
-                {
-                    displayErrorMsg();
-                }
-                else
-                {
-                    displayMsg();
-                }
-            }
-// TODO add your handling code here:
-            catch (ParseException | SQLException | ClassNotFoundException ex) {
-                displayErrorMsg();
-            }
-            
-        }
+
     }//GEN-LAST:event_userActionPerformed
 
     private void displayMsg()
     {
         JOptionPane.showMessageDialog(null, "Succesfull");
+        
+        //to be changed to login page
         searchUserAccountGUI sua = new searchUserAccountGUI ();
         sua.setVisible(true);
         dispose();
@@ -291,6 +266,11 @@ public class createCustomerAccountGUI extends javax.swing.JFrame {
     private void displayErrorMsg()
     {
         JOptionPane.showMessageDialog(null, "Error.");
+    }
+    
+    private void displayErrorMsg2()
+    {
+        JOptionPane.showMessageDialog(null, "Please use a different username.");
     }
     
     private void createActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createActionPerformed
@@ -304,12 +284,19 @@ public class createCustomerAccountGUI extends javax.swing.JFrame {
                 Date parsed = format.parse(datevalue);
                 java.sql.Date DOB = new java.sql.Date(parsed.getTime());
                 String uservalue = user.getText();
+                userAccount ua = new userAccount();
+                boolean copy = ua.checkUser(uservalue);
+                if (copy == true)
+                {
+                    displayErrorMsg2();
+                    return;
+                }
                 String passvalue = pass.getText();
-                int phonevalue = Integer.parseInt(phone.getText());
+                String phonevalue = phone.getText();
                 String emailvalue = email.getText();
                 String addressvalue = address.getText();
                 boolean x = uac1.createUserAccount(namevalue, DOB, uservalue,
-                            passvalue, phonevalue, emailvalue, addressvalue);
+                            passvalue, phonevalue, emailvalue, addressvalue, 4);
                 if (x == false)
                 {
                     displayErrorMsg();
@@ -323,7 +310,6 @@ public class createCustomerAccountGUI extends javax.swing.JFrame {
             catch (ParseException | SQLException | ClassNotFoundException ex) {
                 displayErrorMsg();
             }
-            
         }
     }//GEN-LAST:event_createActionPerformed
 
@@ -337,6 +323,7 @@ public class createCustomerAccountGUI extends javax.swing.JFrame {
 
     private void backActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backActionPerformed
         // TODO add your handling code here:
+        //to be changed with login page
         searchUserAccountGUI sua = new searchUserAccountGUI ();
         sua.setVisible(true);
         dispose();
@@ -372,7 +359,11 @@ public class createCustomerAccountGUI extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new createUserAccountGUI().setVisible(true);
+                try {
+                    new createUserAccountGUI().setVisible(true);
+                } catch (ClassNotFoundException ex) {
+                    Logger.getLogger(createCustomerAccountGUI.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }

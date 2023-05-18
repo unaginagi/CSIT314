@@ -20,9 +20,15 @@ public class suspendUserAccountGUI extends javax.swing.JFrame {
     int ID;
     /**
      * Creates new form suspendUserAccountGUI
+     * @param UID
      */
-    public suspendUserAccountGUI() {
+    public suspendUserAccountGUI(int UID) {
         initComponents();
+        ID = UID;
+    }
+
+    private suspendUserAccountGUI() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
     /**
@@ -100,6 +106,7 @@ public class suspendUserAccountGUI extends javax.swing.JFrame {
     private void suspendActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_suspendActionPerformed
         try {
             // TODO add your handling code here:
+            System.out.println(ID);
             boolean x = uac1.LockUserAccount(ID);
             if (x != true)
             {
@@ -108,9 +115,6 @@ public class suspendUserAccountGUI extends javax.swing.JFrame {
             else 
             {
                 displayMsg();
-                retrieveUserAccountGUI rua = new retrieveUserAccountGUI(ID);
-                rua.setVisible(true);
-                dispose();
             }
         } catch (SQLException | ClassNotFoundException ex) {
             displayErrorMsg();
@@ -123,7 +127,7 @@ public class suspendUserAccountGUI extends javax.swing.JFrame {
 
     private void cancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelActionPerformed
         // TODO add your handling code here:
-        retrieveUserAccountGUI rua = new retrieveUserAccountGUI(ID);
+        retrieveCustomerAccountGUI rua = new retrieveCustomerAccountGUI(ID);
         rua.setVisible(true);
         dispose();
     }//GEN-LAST:event_cancelActionPerformed

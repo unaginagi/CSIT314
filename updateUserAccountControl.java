@@ -12,7 +12,7 @@ public class updateUserAccountControl
     }
 
     public boolean updateUserAccount (int UID, String name, Date DOB, String user, String password,
-                                    int phoneNo, String email, String address) throws SQLException, ClassNotFoundException
+                                    String phoneNo, String email, String address) throws SQLException, ClassNotFoundException
     {
         userAccount ua1 = new userAccount ();
         boolean output = ua1.updatingUserAccount (UID, name, DOB, user, password,

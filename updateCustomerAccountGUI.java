@@ -32,7 +32,7 @@ public class updateCustomerAccountGUI extends javax.swing.JFrame {
     String passwordValue;
     String DOBValue;
     String emailValue;
-    int phoneValue;
+    String phoneValue;
     String addressValue;
     updateCustomerAccountControl uac1 = new updateCustomerAccountControl ();
     
@@ -161,7 +161,7 @@ public class updateCustomerAccountGUI extends javax.swing.JFrame {
                 .addGap(40, 40, 40)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -184,12 +184,12 @@ public class updateCustomerAccountGUI extends javax.swing.JFrame {
                                 .addComponent(user, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(day, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(day, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(month, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(month, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(year, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(year, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -263,7 +263,7 @@ public class updateCustomerAccountGUI extends javax.swing.JFrame {
     private void displayMsg()
     {
         JOptionPane.showMessageDialog(null, "Succesfull");
-        retrieveUserAccountGUI rua = new retrieveUserAccountGUI(ID);
+        retrieveCustomerAccountGUI rua = new retrieveCustomerAccountGUI(ID);
         rua.setVisible(true);
         dispose();
     }
@@ -274,21 +274,32 @@ public class updateCustomerAccountGUI extends javax.swing.JFrame {
     }
     
     public void recieve (int UID1, String name1, String user1, String pass1, String DOB1, String email1,
-                           int phone1, String address1)
+                           String phone1, String address1)
     {
         try {
+            ID = UID1;
             name.setText(name1);
             user.setText(user1);
             pass.setText(pass1);
-            SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
+            SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
             Date parsed = format.parse(DOB1);
             Calendar c = Calendar.getInstance();
             c.setTime(parsed);
-            day.setSelectedItem(c.get(Calendar.DAY_OF_WEEK));
-            month.setSelectedItem(c.get(Calendar.MONTH));
+            String day1 =  Integer.toString(c.get(Calendar.DAY_OF_WEEK));
+            if (day1.length() == 1)
+            {
+                day1 = "0" + day1;
+            }
+            String month1 =  Integer.toString(c.get(Calendar.MONTH));
+            if (month1.length() == 1)
+            {
+                month1 = "0" + month1;
+            }
+            day.setSelectedItem(day1);
+            month.setSelectedItem(month1);
             year.setSelectedItem(c.get(Calendar.YEAR));
             email.setText(email1);
-            phone.setText(String.valueOf(phone1));
+            phone.setText(phone1);
             address.setText(address1);
             
         } catch (ParseException ex) {
@@ -309,7 +320,7 @@ public class updateCustomerAccountGUI extends javax.swing.JFrame {
                 java.sql.Date DOB = new java.sql.Date(parsed.getTime());
                 String uservalue = user.getText();
                 String passvalue = pass.getText();
-                int phonevalue = Integer.parseInt(phone.getText());
+                String phonevalue = phone.getText();
                 String emailvalue = email.getText();
                 String addressvalue = address.getText();;
                 boolean x = uac1.updateUserAccount(ID, namevalue, DOB, 
@@ -345,40 +356,6 @@ public class updateCustomerAccountGUI extends javax.swing.JFrame {
         dispose();
     }//GEN-LAST:event_cancelActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(createUserAccountGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(createUserAccountGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(createUserAccountGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(createUserAccountGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new createUserAccountGUI().setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField address;

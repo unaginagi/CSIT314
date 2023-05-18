@@ -1,7 +1,6 @@
 package Control;
 
 import userAccount.userAccount;
-import java.sql.Date;  
 import java.sql.SQLException;
 
 public class retrieveUserAccountControl
