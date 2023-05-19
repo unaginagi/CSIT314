@@ -395,10 +395,13 @@ public class searchUserAccountGUI extends javax.swing.JFrame {
             }
             
             String profileIDvalue = profileid.getText();
-            int profilevalue = Integer.parseInt(profileid.getText());
+            int profilevalue = 0;
             if (profileIDvalue.equals(""))
             {
                 profilevalue = 0;
+            }
+            else{
+                profilevalue = Integer.parseInt(profileid.getText());
             }
             
             ual = sua.getUserAccount(UIDvalue, namevalue, DOB, uservalue, passvalue
@@ -430,7 +433,7 @@ public class searchUserAccountGUI extends javax.swing.JFrame {
 
     private void backActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backActionPerformed
         // TODO add your handling code here:
-        adminUserSelectGUI aus = new adminUserSelectGUI();
+        DashboardUserAdmin aus = new DashboardUserAdmin();
         aus.setVisible(true);
         dispose();
         

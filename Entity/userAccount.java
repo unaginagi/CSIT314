@@ -361,7 +361,7 @@ public class userAccount
     public static int validateLogin(String username, String password) throws SQLException, Exception 
     {
        
-        String query = "SELECT profileID FROM useraccount WHERE user = ? AND password = ?";
+        String query = "SELECT profileID FROM useraccount WHERE user = ? AND password = ? AND suspended = 0";
         PreparedStatement statement = null;
         ResultSet resultSet = null;
         //boolean isValidLogin = false;

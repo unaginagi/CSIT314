@@ -91,18 +91,34 @@ public class LoginPage extends JFrame implements ActionListener {
                 dispose();
                 //WHAT IS SEEN BASED ON WHO LOGS IN
                 if (LoginPageLogin(username, password)==1){
+                    // USER: USER ADMIN
                     java.awt.EventQueue.invokeLater(new Runnable() {
                     public void run() {
-                        new adminUserSelectGUI().setVisible(true);
+                        new DashboardUserAdmin().setVisible(true);
                     }
                     });
-                    // USER: USER ADMIN
+                    
                 } else if (LoginPageLogin(username, password)==2){
                     // USER: CINEMA OWNER - view report
+                    java.awt.EventQueue.invokeLater(new Runnable() {
+                        public void run() {
+                            new DashboardCinemaOwner().setVisible(true);
+                        }
+                    });
                 } else if (LoginPageLogin(username, password)==3){
                     // USER: CINEMA MANAGER - manage food drinks cinema room etc
+                        java.awt.EventQueue.invokeLater(new Runnable() {
+                        public void run() {
+                            new DashboardCinemaManager().setVisible(true);
+                        }
+                        });
                 }else if (LoginPageLogin(username, password)==4){
                     // USER: CUSTOMER - book ticket
+                    java.awt.EventQueue.invokeLater(new Runnable() {
+                    public void run() {
+                        new DashboardCustomer().setVisible(true);
+                    }
+                    });
                 } else {
                     // USER: undefined
                     JOptionPane.showMessageDialog(this, 
