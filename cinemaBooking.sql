@@ -228,7 +228,7 @@ CREATE TABLE `booking` (
   `UID` int(11) NOT NULL,
   `ticketID` int(3) NOT NULL,
   `quantity` int(3) NOT NULL,
-  `price` double(4,2) NOT NULL,
+  `price` double(5,2) NOT NULL,
   `book_date` datetime NOT NULL DEFAULT current_timestamp(),
   CONSTRAINT FK_bookMS FOREIGN KEY (roomID,SessionTiming)
 	REFERENCES MovieSession(roomID,SessionTiming),
@@ -240,3 +240,23 @@ CREATE TABLE `booking` (
 
 ALTER TABLE booking
   MODIFY `bookingID` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=100000;
+  
+  -- --------------------------------------------------------
+--
+-- Table structure for table `food_sales`
+--
+
+CREATE TABLE `food_sales` (
+  `fsalesID` int(5) NOT NULL PRIMARY KEY,
+  `bookingID` int(6) NOT NULL,
+  `foodID` int(3) NOT NULL,
+  `quantity` int(3) NOT NULL,
+  `price` double(5,2)  NOT NULL,
+  CONSTRAINT FK_fsalesBooking FOREIGN KEY (bookingID)
+	REFERENCES booking(bookingID),
+  CONSTRAINT FK_fsales_fItems FOREIGN KEY (foodID)
+	REFERENCES food_items(id)
+);
+
+ALTER TABLE food_sales
+  MODIFY `fsalesID` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10000;
