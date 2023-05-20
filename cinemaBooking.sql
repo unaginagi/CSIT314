@@ -80,18 +80,19 @@ VALUES
 CREATE TABLE `tickettype` (
   `ID` int(3) NOT NULL PRIMARY KEY,
   `typeName` varchar(255) NOT NULL,
-  `price` double(4,2) NOT NULL
+  `price` double(4,2) NOT NULL,
+  `ageLimit` int(3) NOT NULL
 );
 
 ALTER TABLE tickettype
   MODIFY `ID` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=100;
 
-INSERT INTO tickettype (typeName, price)
-VALUES ("adult", 15);
-INSERT INTO tickettype (typeName, price)
-VALUES ("senior", 6);
-INSERT INTO tickettype (typeName, price)
-VALUES ("student", 8);
+INSERT INTO tickettype (typeName, price, ageLimit)
+VALUES ("adult", 15, -1);
+INSERT INTO tickettype (typeName, price, ageLimit)
+VALUES ("senior", 6, 60);
+INSERT INTO tickettype (typeName, price, ageLimit)
+VALUES ("student", 8, 18);
 -- --------------------------------------------------------
 
 --
@@ -252,6 +253,7 @@ CREATE TABLE `food_sales` (
   `foodID` int(3) NOT NULL,
   `quantity` int(3) NOT NULL,
   `price` double(5,2)  NOT NULL,
+  `book_date` datetime NOT NULL DEFAULT current_timestamp(),
   CONSTRAINT FK_fsalesBooking FOREIGN KEY (bookingID)
 	REFERENCES booking(bookingID),
   CONSTRAINT FK_fsales_fItems FOREIGN KEY (foodID)
