@@ -216,7 +216,6 @@ INSERT INTO food_items (id,name, description, price)
 VALUES (0005,"Ice Lemon Tea", "Heaven&Earth", "3.6");
 
 --DROP TABLE food_items;
-
 -- --------------------------------------------------------
 --
 -- Table structure for table `booking`
