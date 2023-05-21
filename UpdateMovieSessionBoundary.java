@@ -8,10 +8,7 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
-import java.time.LocalDateTime;
-import java.time.Year;
 import java.util.ArrayList;
-import java.util.Calendar;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -19,14 +16,9 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JSpinner;
 import javax.swing.JTable;
 import javax.swing.JTextField;
-import javax.swing.SpinnerModel;
-import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
-import javax.swing.JSpinner.DefaultEditor;
-import javax.swing.JSpinner.NumberEditor;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
@@ -89,65 +81,36 @@ public class UpdateMovieSessionBoundary {
 			JOptionPane.showMessageDialog(dialog, "Unknown Error", "Alert", JOptionPane.WARNING_MESSAGE);
 		}
 		
+		String oldMovieID = data[0][2];
+		
 		JTextField movieIdField = new JTextField(8);
-		movieIdField.setText(data[0][2]);
+		movieIdField.setText(oldMovieID);
 		movieIdField.setFont(new Font("Arial", Font.PLAIN, 25));
 		movieIdField.setColumns(4);
-			
+		
 		JLabel roomIdResultLabel = new JLabel(data[0][0]);
 		roomIdResultLabel.setFont(new Font("Arial", Font.PLAIN, 25));
 		roomIdResultLabel.setHorizontalAlignment(JLabel.CENTER);
 		
-		SpinnerModel yearValue = new SpinnerNumberModel(Integer.parseInt(data[0][1].substring(0, 4)), Year.now().getValue(), 2150, 1);
-		JSpinner yearSpinner = new JSpinner(yearValue);
-		yearSpinner.setFont(new Font("Arial", Font.PLAIN, 25));
+		JLabel yearResultLabel = new JLabel(data[0][1].substring(0, 4));
+		yearResultLabel.setFont(new Font("Arial", Font.PLAIN, 25));
+		yearResultLabel.setHorizontalAlignment(JLabel.CENTER);
 		
-		NumberEditor yearEditor = new JSpinner.NumberEditor(yearSpinner, "#");
-		yearEditor.getTextField().setEnabled(false);
-		yearEditor.getTextField().setEditable(false);
-		yearEditor.getTextField().setHorizontalAlignment(SwingConstants.CENTER);
+		JLabel monthResultLabel = new JLabel(data[0][1].substring(5, 7));
+		monthResultLabel.setFont(new Font("Arial", Font.PLAIN, 25));
+		monthResultLabel.setHorizontalAlignment(JLabel.CENTER);
 		
-		yearSpinner.setEditor(yearEditor);
+		JLabel dayResultLabel = new JLabel(data[0][1].substring(8, 10));
+		dayResultLabel.setFont(new Font("Arial", Font.PLAIN, 25));
+		dayResultLabel.setHorizontalAlignment(JLabel.CENTER);
 		
-		SpinnerModel monthValue = new SpinnerNumberModel(Integer.parseInt(data[0][1].substring(5, 7)), 1, 12, 1);
-		JSpinner monthSpinner = new JSpinner(monthValue);
-		monthSpinner.setFont(new Font("Arial", Font.PLAIN, 25));
+		JLabel hourResultLabel = new JLabel(data[0][1].substring(11, 13));
+		hourResultLabel.setFont(new Font("Arial", Font.PLAIN, 25));
+		hourResultLabel.setHorizontalAlignment(JLabel.CENTER);
 		
-		DefaultEditor monthEditor = new JSpinner.DefaultEditor(monthSpinner);
-		monthEditor.getTextField().setHorizontalAlignment(SwingConstants.CENTER);
-		monthEditor.getTextField().setColumns(4);
-		
-		monthSpinner.setEditor(monthEditor);
-		
-		SpinnerModel dayValue = new SpinnerNumberModel(Integer.parseInt(data[0][1].substring(8, 10)), 1, 31, 1);
-		JSpinner daySpinner = new JSpinner(dayValue);
-		daySpinner.setFont(new Font("Arial", Font.PLAIN, 25));
-		
-		DefaultEditor dayEditor = new JSpinner.DefaultEditor(daySpinner);
-		dayEditor.getTextField().setHorizontalAlignment(SwingConstants.CENTER);
-		dayEditor.getTextField().setColumns(4);
-		
-		daySpinner.setEditor(dayEditor);
-		
-		SpinnerModel hourValue = new SpinnerNumberModel(Integer.parseInt(data[0][1].substring(11, 13)), 0, 23, 1);
-		JSpinner hourSpinner = new JSpinner(hourValue);
-		hourSpinner.setFont(new Font("Arial", Font.PLAIN, 25));
-		
-		DefaultEditor hourEditor = new JSpinner.DefaultEditor(hourSpinner);
-		hourEditor.getTextField().setHorizontalAlignment(SwingConstants.CENTER);
-		hourEditor.getTextField().setColumns(4);
-		
-		hourSpinner.setEditor(hourEditor);
-		
-		SpinnerModel minuteValue = new SpinnerNumberModel(Integer.parseInt(data[0][1].substring(14, 16)), 0, 59, 1);
-		JSpinner minuteSpinner = new JSpinner(minuteValue);
-		minuteSpinner.setFont(new Font("Arial", Font.PLAIN, 25));
-		
-		DefaultEditor minuteEditor = new JSpinner.DefaultEditor(minuteSpinner);
-		minuteEditor.getTextField().setHorizontalAlignment(SwingConstants.CENTER);
-		minuteEditor.getTextField().setColumns(4);
-		
-		minuteSpinner.setEditor(minuteEditor);
+		JLabel minuteResultLabel = new JLabel(data[0][1].substring(14, 16));
+		minuteResultLabel.setFont(new Font("Arial", Font.PLAIN, 25));
+		minuteResultLabel.setHorizontalAlignment(JLabel.CENTER);
 		
 		ArrayList<String[]> movieData = new ArrayList<>();
 		ArrayList<String[]> roomData = new ArrayList<>();
@@ -247,59 +210,28 @@ public class UpdateMovieSessionBoundary {
 		enterButton.addActionListener(new ActionListener() {
 						
 			@Override
-			public void actionPerformed(ActionEvent evt){
-				String sessionTiming = "" + yearSpinner.getValue() + "-";
-				
-				int month = (int) (monthSpinner.getValue());
-				if(month < 10)
-					sessionTiming += "0" + month + "-";
-				else
-					sessionTiming += month + "-";
-				
-				int day = (int) (daySpinner.getValue());
-				if(day < 10)
-					sessionTiming += "0" + day + " ";
-				else
-					sessionTiming += day + " ";
-				
-				int hour = (int) (hourSpinner.getValue());
-				if(hour < 10)
-					sessionTiming += "0" + hour + ":";
-				else
-					sessionTiming += hour + ":";
-				
-				int minute = (int) (minuteSpinner.getValue());
-				if(minute < 10)
-					sessionTiming += "0" + minute + ":00";
-				else
-					sessionTiming += minute + ":00";
-				
-				if(umsc.isDateValid(sessionTiming)) {
-					try {
+			public void actionPerformed(ActionEvent evt){	
+				try {
 						
-						if(!umsc.checkMovieId(movieIdField.getText())) {					
-							JOptionPane.showMessageDialog(dialog, "Movie ID does not exist", "Alert", JOptionPane.WARNING_MESSAGE);
+					if(!umsc.checkMovieId(movieIdField.getText())) {					
+						JOptionPane.showMessageDialog(dialog, "Movie ID does not exist", "Alert", JOptionPane.WARNING_MESSAGE);
+						
+					} else {
+						String result = umsc.executeTask(roomIdResultLabel.getText(), sessionTiming, movieIdField.getText(), oldMovieID);
+						
+						if(result.equals("Successful")) {
+							JOptionPane.showMessageDialog(dialog, result);
+							dialog.setVisible(false);
 							
 						} else {
-							String result = umsc.executeTask(roomIdResultLabel.getText(), sessionTiming, movieIdField.getText());
-							
-							if(result.equals("Successful")) {
-								JOptionPane.showMessageDialog(dialog, result);
-								dialog.setVisible(false);
-								
-							} else {
-								JOptionPane.showMessageDialog(dialog, result, "Alert", JOptionPane.WARNING_MESSAGE);
-							}
+							JOptionPane.showMessageDialog(dialog, result, "Alert", JOptionPane.WARNING_MESSAGE);
 						}
-					} catch (SQLException e) {
-						JOptionPane.showMessageDialog(dialog, "Database Error", "Alert", JOptionPane.WARNING_MESSAGE);
-						
-					} catch (Exception e) {
-						JOptionPane.showMessageDialog(dialog, "Unknown Error", "Alert", JOptionPane.WARNING_MESSAGE);
 					}
+				} catch (SQLException e) {
+					JOptionPane.showMessageDialog(dialog, "Database Error", "Alert", JOptionPane.WARNING_MESSAGE);
 					
-				} else { 
-					JOptionPane.showMessageDialog(dialog, "Invalid date", "Alert", JOptionPane.WARNING_MESSAGE);
+				} catch (Exception e) {
+					JOptionPane.showMessageDialog(dialog, "Unknown Error", "Alert", JOptionPane.WARNING_MESSAGE);
 				}
 			}
 		});
@@ -323,35 +255,35 @@ public class UpdateMovieSessionBoundary {
 		otherPanel.add(yearLabel, gbc);
 		
 		gbc.gridx++;
-		otherPanel.add(yearSpinner, gbc);
+		otherPanel.add(yearResultLabel, gbc);
 					
 		gbc.gridx--;
 		gbc.gridy++;
 		otherPanel.add(monthLabel, gbc);
 					
 		gbc.gridx++;
-		otherPanel.add(monthSpinner, gbc);
+		otherPanel.add(monthResultLabel, gbc);
 					
 		gbc.gridx--;
 		gbc.gridy++;
 		otherPanel.add(dayLabel, gbc);
 		
 		gbc.gridx++;
-		otherPanel.add(daySpinner, gbc);
+		otherPanel.add(dayResultLabel, gbc);
 		
 		gbc.gridx--;
 		gbc.gridy++;
 		otherPanel.add(hourLabel, gbc);
 		
 		gbc.gridx++;
-		otherPanel.add(hourSpinner, gbc);
+		otherPanel.add(hourResultLabel, gbc);
 		
 		gbc.gridx--;
 		gbc.gridy++;
 		otherPanel.add(minuteLabel, gbc);
 		
 		gbc.gridx++;
-		otherPanel.add(minuteSpinner, gbc);
+		otherPanel.add(minuteResultLabel, gbc);
 		
 		gbc.gridx = 0;
 		gbc.gridy = 0;
