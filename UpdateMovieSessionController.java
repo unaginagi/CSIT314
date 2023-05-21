@@ -19,24 +19,6 @@ public class UpdateMovieSessionController {
 	
 	private final String DATE_FORMAT = "yyyy-MM-dd";
 	
-	public boolean validateInput(String input) {
-		if(input.isBlank()) {
-			return false;
-		}
-		
-		try {
-			int num = Integer.parseInt(input);
-			
-			if(num <= 0)
-				return false;
-			
-		} catch (NumberFormatException e) {
-			return false;
-		}
-		
-		return true;
-	}
-	
 	public boolean isDateValid(String date)
 	{
 		try {
@@ -51,22 +33,8 @@ public class UpdateMovieSessionController {
 		}
 	}
 	
-	public boolean isRoomValid(String id) throws SQLException, Exception
-	{
-		if(cinemaRoom.getStateCheckData(id).equals("Available"))
-			return true;
-		
-		return false;
-	}
-	
 	public boolean checkMovieId(String input) throws SQLException, Exception {
 		ResultSet rs = movie.getMovieIdCheckData(input);
-		
-		return rs.next();
-	}
-	
-	public boolean checkRoomId(String input) throws SQLException, Exception {
-		ResultSet rs = cinemaRoom.getRoomIdCheckData(input);
 		
 		return rs.next();
 	}
