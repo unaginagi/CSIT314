@@ -22,6 +22,90 @@ public class userAccount
     {
 
     }
+    
+     // Getters
+    
+    public int getUID() {
+        return UID;
+    }
+    
+    public String getName() {
+        return name;
+    }
+    
+    public Date getDOB() {
+        return DOB;
+    }
+    
+    public String getUser() {
+        return user;
+    }
+    
+    public String getPassword() {
+        return password;
+    }
+    
+    public String getPhoneNo() {
+        return phoneNo;
+    }
+    
+    public String getEmail() {
+        return email;
+    }
+    
+    public String getAddress() {
+        return address;
+    }
+    
+    public boolean isSuspended() {
+        return suspended;
+    }
+    
+    public int getProfileID() {
+        return profileID;
+    }
+    
+    // Setters
+    
+    public void setUID(int UID) {
+        this.UID = UID;
+    }
+    
+    public void setName(String name) {
+        this.name = name;
+    }
+    
+    public void setDOB(Date DOB) {
+        this.DOB = DOB;
+    }
+    
+    public void setUser(String user) {
+        this.user = user;
+    }
+    
+    public void setPassword(String password) {
+        this.password = password;
+    }
+    
+    public void setPhoneNo(String phoneNo) {
+        this.phoneNo = phoneNo;
+    }
+    
+    public void setEmail(String email) {
+        this.email = email;
+    }
+    
+    public void setAddress(String address) {
+        this.address = address;
+    }
+    
+    public void setSuspended(boolean suspended) {
+        this.suspended = suspended;
+    }
+    
+    public void setProfileID(int profileID) {
+        this.profileID = profileID;
+    }
 
     public userAccount (int UID, String name, Date DOB, String user, String password, 
                         String phoneNo, String email, String address, boolean suspended, int profileID)
@@ -358,59 +442,44 @@ public class userAccount
         }
    }
    
-    public static int validateLogin(String username, String password) throws SQLException, Exception 
-    {
-       
-        String query = "SELECT profileID FROM useraccount WHERE user = ? AND password = ? AND suspended = 0";
+    public static int[] validateLogin(String username, String password) throws SQLException, Exception {
+        String query = "SELECT UID, profileID FROM useraccount WHERE user = ? AND password = ? AND suspended = 0";
         PreparedStatement statement = null;
         ResultSet resultSet = null;
-        //boolean isValidLogin = false;
         Connection myCon = null;
-        int loggedInUserProfileID = -1;
-    
-        try
-        {
-            
+        int[] loggedInUserInfo = { -1, -1 }; // Default values if login is not valid
+
+        try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-       
-            myCon = DriverManager.getConnection (URL, "admin", "admin");
+            myCon = DriverManager.getConnection(URL, "admin", "admin");
             statement = myCon.prepareStatement(query);
             statement.setString(1, username);
             statement.setString(2, password);
             resultSet = statement.executeQuery();
-            
+
             if (resultSet.next()) {
-                loggedInUserProfileID = resultSet.getInt("profileID");
-                //return count > 0;
+                loggedInUserInfo[0] = resultSet.getInt("UID");
+                loggedInUserInfo[1] = resultSet.getInt("profileID");
             }
-        } 
-        catch (SQLException e) 
-        {
+        } catch (SQLException e) {
             e.printStackTrace();
-        }
-        finally 
-        {
-        // Close the resources in the reverse order of their creation
-            try 
-            {
-                if (resultSet != null) 
-                {
+        } finally {
+            // Close the resources in the reverse order of their creation
+            try {
+                if (resultSet != null) {
                     resultSet.close();
                 }
-                if (statement != null) 
-                {
+                if (statement != null) {
                     statement.close();
                 }
-                if (myCon != null) 
-                {
+                if (myCon != null) {
                     myCon.close();
                 }
-        } 
-        catch (SQLException e) 
-        {
-            e.printStackTrace();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
-    }
-        return loggedInUserProfileID;
-    }
+
+        return loggedInUserInfo;
+}
 }

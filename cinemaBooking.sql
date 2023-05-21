@@ -107,6 +107,10 @@ CREATE TABLE `CinemaRoom` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
+ALTER TABLE CinemaRoom
+  MODIFY ID int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+-- COMMIT;
+
 
 INSERT INTO CinemaRoom (Name, Capacity, State)
 VALUES ("Snowdrop", 150, "Available");
@@ -185,6 +189,9 @@ VALUES (3, "2023-04-15 16:20:00", 3);
 
 INSERT INTO MovieSession (RoomID, SessionTiming, MovieID)
 VALUES (5, "2023-03-11 14:30:00", 4);
+
+INSERT INTO MovieSession (RoomID, SessionTiming, MovieID)
+VALUES (6, "2023-03-11 14:30:00", 4);
 
 
 -- --------------------------------------------------------

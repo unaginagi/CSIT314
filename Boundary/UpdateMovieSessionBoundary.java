@@ -1,9 +1,5 @@
 package Boundary;
 
-import Controller.GetMovieListController;
-import Controller.GetRoomListController;
-import Controller.RetrieveMovieSessionController;
-import Controller.UpdateMovieSessionController;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
@@ -35,6 +31,10 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 
+import Controller.UpdateMovieSessionController;
+import Controller.GetMovieListController;
+import Controller.GetRoomListController;
+import Controller.RetrieveMovieSessionController;
 
 public class UpdateMovieSessionBoundary {
 	private final UpdateMovieSessionController umsc = new UpdateMovieSessionController();

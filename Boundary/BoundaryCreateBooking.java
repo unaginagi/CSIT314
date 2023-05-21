@@ -1,108 +1,153 @@
 package Boundary;
 
 import Controller.ControllerCreateBooking;
+import Controller.ControllerSearchTicketType;
+import Controller.GetBookingListController;
 import Controller.GetMovieListController;
+import Controller.GetRoomListController;
 import Controller.GetSessionListController;
+import Controller.retrieveUserAccountControl;
+import Entity.ticketType;
+import Entity.userAccount;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
 import java.sql.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.Calendar;
+import java.util.HashSet;
+import java.util.Set;
 
-public class BoundaryCreateBooking extends JDialog {
-    private JComboBox<String> movieNameComboBox;
-    private JComboBox<String> sessionTimingComboBox;
+public class BoundaryCreateBooking extends JFrame implements ActionListener {
+    private JComboBox<String> movieSessionComboBox;
     private JComboBox<String> ticketTypeComboBox;
     private JTextField quantityField;
+    private JTextField quantityValField;
     private JButton addButton;
     
     static ControllerCreateBooking bookingCreateCtrl = new ControllerCreateBooking();
     static GetMovieListController getMovieCtrl = new GetMovieListController();
     static GetSessionListController getSessionCtrl = new GetSessionListController();
+    static retrieveUserAccountControl getUserInfoCtrl = new retrieveUserAccountControl();
+    static ControllerSearchTicketType searcTicketCtrl = new ControllerSearchTicketType();
+    static GetRoomListController getRoomsCtrl = new GetRoomListController();
+    static GetBookingListController getBookingCtrl = new GetBookingListController();
     
-    public BoundaryCreateBooking(Frame owner) throws Exception {
-        super(owner, "Make a Booking", true);
-        initComponents();
-        configureDialog();
-    }
-    //int roomID, String sessionTiming, String ticketName, int quantity
-    private void initComponents() throws Exception {
+    private int cUID;
+    Set<String> addedItems = new HashSet<>();
+    
+    private final ArrayList<Integer> ms1 = new ArrayList<>();
+    private final ArrayList<String> ms2 = new ArrayList<>();
+    private final ArrayList<Integer> ms3 = new ArrayList<>();
+    
+    private final ArrayList<Integer> r0 = new ArrayList<>();
+    private final ArrayList<String> r1 = new ArrayList<>();
+    private final ArrayList<Integer> r2 = new ArrayList<>();
+    private final ArrayList<String> r3 = new ArrayList<>();
+           
+    public BoundaryCreateBooking(int UID) {
+        setTitle("Create a Booking");
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        setSize(500, 400);
+        setLocationRelativeTo(null);
+        setResizable(false);
+        cUID = UID;
+        
         // Create the JComboBox instances
-        movieNameComboBox = new JComboBox<>();
-        sessionTimingComboBox = new JComboBox<>();
+        movieSessionComboBox = new JComboBox<>();
+        ticketTypeComboBox = new JComboBox<>();
         
-        JPanel panel = new JPanel();
-        panel.setLayout(new FlowLayout());
-        
-        
-        panel.add(new JLabel("Movie Name: "));
-        panel.add(movieNameComboBox);
-        panel.add(new JLabel("Time Slot: "));
-        panel.add(sessionTimingComboBox);
+        JPanel panel = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.insets = new Insets(10, 10, 10, 10);
+        gbc.weightx = 1.0; // Equal horizontal weight for all buttons
         
         // Populate the JComboBox options
-        populateMovies();
+        populateMovieSessions();
+        populateTicketType(cUID);
         
-        // Add ActionListener to Movie ID JComboBox
-        movieNameComboBox.addActionListener(e -> {
-            try {
-                populateSessionTimings();
-            } catch (Exception ex) {
-                Logger.getLogger(BoundaryCreateBooking.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        });
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        panel.add(new JLabel("Movie Session: "),gbc);
+        gbc.gridx = 1;
+        gbc.gridy = 0;
+        panel.add(movieSessionComboBox,gbc);
         
-        // Set initial state of SessionTiming JComboBox
-        sessionTimingComboBox.setEnabled(false);
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        panel.add(new JLabel("Ticket Type: "), gbc);
+
+        gbc.gridx = 1;
+        gbc.gridy = 1;
+        panel.add(ticketTypeComboBox, gbc);
         
-        add(new JLabel("Ticket Type: "));
-        add(ticketTypeComboBox);
-        
+        gbc.gridx = 0;
+        gbc.gridy = 2;
         JLabel quantityLabel = new JLabel("Number of tickets:");
-        panel.add(quantityLabel);
+        panel.add(quantityLabel,gbc);
+        
+        gbc.gridx = 1;
+        gbc.gridy = 2;
+        quantityValField = new JTextField();
+        panel.add(quantityValField,gbc);
 
-        quantityField = new JTextField();
-        panel.add(quantityField);
-
+        gbc.gridx = 0; 
+        gbc.gridy = 3;
+        gbc.gridwidth = 2;
+        gbc.anchor = GridBagConstraints.CENTER;
         addButton = new JButton("Make Booking");
         addButton.addActionListener((ActionEvent e) -> {
             try {
                 System.out.println("Booking...");
                 
                 // Get the entered values
-                String selectedMovieName = (String) movieNameComboBox.getSelectedItem();
-                String selectedSessionTiming = (String) sessionTimingComboBox.getSelectedItem();
+                String selectedMovieSession = (String) movieSessionComboBox.getSelectedItem();
                 String selectedTicketType = (String) ticketTypeComboBox.getSelectedItem();
-                int movieID = 0;
-                int roomID = 0;
-                int quantity = 0;
                 
-                movieID = getMovieID(selectedMovieName);
-                roomID = getRoomID(movieID,selectedSessionTiming);
+                String[] parts = selectedMovieSession.split(", ");
+                String sessionTime = parts[1];
+                int roomID = Integer.parseInt(parts[2]);
+                System.out.println(sessionTime);
+                System.out.println(roomID);
                 
-                quantity = Integer.parseInt(quantityField.getText());
+                int ticketID = getTicketID(selectedTicketType);
                 
-                boolean result = bookingCreateCtrl.createBooking(roomID, selectedSessionTiming, selectedTicketType, quantity);
+                int quantity = Integer.parseInt(quantityValField.getText());
+                
+                double ticketPrice = getTicketPrice(selectedTicketType);
+                double price = quantity * ticketPrice;
+                
+                boolean result = bookingCreateCtrl.createBooking(roomID, sessionTime, cUID, ticketID, quantity, price);
                 displayMsg(result);
+                
+                BoundaryPrepurchaseFnBDialog dialog = new BoundaryPrepurchaseFnBDialog(this, "Are you sure?");
+                boolean answer = dialog.getAnswer();
+                
+                int cBID = getCurrentBookingID(roomID,sessionTime,cUID, ticketID, quantity);
+                if (answer) {
+                    // Redirect to Page A
+                    // Your code to redirect to Page A
+                } else {
+                    // Redirect to Page B
+                    // Your code to redirect to Page B
+                }
+                
                 // Close the dialog
                 dispose();
             } catch (Exception ex) {
                 Logger.getLogger(BoundaryCreateBooking.class.getName()).log(Level.SEVERE, null, ex);
             }
         });
-        panel.add(addButton);
-
-        getContentPane().add(panel);
-    }
-
-    private void configureDialog() {
-        setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-        pack();
-        setLocationRelativeTo(getOwner());
+        panel.add(addButton,gbc);
+        
+        add(panel);
     }
     
     private void displayMsg(boolean result){
@@ -115,60 +160,230 @@ public class BoundaryCreateBooking extends JDialog {
             }
     }
     
-    private void populateMovies() throws Exception {
-        // Clear the current options
-        movieNameComboBox.removeAllItems();
-        ArrayList<String[]> movieArr = getMovieCtrl.executeTask();
-        
-        for (String[] movie : movieArr) {
-            String name = movie[1]; // Index 1 represents the "Name" field
-            movieNameComboBox.addItem(name);
-        }
-    }
+    private void populateMovieSessions(){
+        try {
+            System.out.println("get session timing");
+            
+            ArrayList<String[]> sessionArr = getSessionCtrl.executeTask();
+            for (String[] session : sessionArr) {
+                // Index 0 is "roomID", Index 1 is "sessionTiming", Index 2 is "MovieID"
+                int sessID = Integer.parseInt(session[0]);
+                ms1.add(sessID);
+                 
+                String sessTime = session[1];
+                ms2.add(sessTime);
+                
+                int movID = Integer.parseInt(session[2]);
+                ms3.add(movID);  
+            }
+            
+            ArrayList<String[]> roomArr = getRoomsCtrl.executeTask();
+            
+            for (String[] r : roomArr) {
+                int id = Integer.parseInt(r[0]);
+                r0.add(id);
+                
+                String name = r[1];
+                r1.add(name);
+                
+                int cap = Integer.parseInt(r[2]);
+                r2.add(cap);
+                
+                String state = r[3];
+                r3.add(state);
+            }
+            
+            getRoomCapacity();
+            
+            // Get the current date and time
+            LocalDateTime now = LocalDateTime.now();
 
-    
-     private void populateSessionTimings() throws Exception {
-        // Clear the current options
-        sessionTimingComboBox.removeAllItems();
-        
-        ArrayList<String[]> sessionArr = getSessionCtrl.executeTask();
-        
-        
-        for (String[] session : sessionArr) {
-            String sess = session[1]; // Index 1 represents the "sessionTiming" field
-            sessionTimingComboBox.addItem(sess);
+            // Define the date and time format of the strings in ms2
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            
+            // add into combo box if session timing is still available
+            for (String dateTimeStr : ms2) {
+                // Parse the string into a LocalDateTime object
+                LocalDateTime dateTime = LocalDateTime.parse(dateTimeStr, formatter);
+
+                // Compare the date and time with the current date and time
+                int comparison = dateTime.compareTo(now);
+                
+                if (comparison > 0) {
+                    // Date is in the future
+                    // check if room is available 
+                    for (int i = 0; i < ms2.size(); i++){
+                        for (int j = 0; j < r0.size();j++){
+                            // check room state
+                            if (ms1.get(i).equals(r0.get(j)) && r3.get(j).equals("Available")){
+                                // check room capacity
+                                if (r2.get(j) > 0){
+                                    String item =  reformItem(dateTimeStr);
+                                    
+                                    // Check for duplicates before adding
+                                    if (!addedItems.contains(item)) {
+                                        movieSessionComboBox.addItem(item);
+                                        addedItems.add(item);
+                                        System.out.println("added");
+                                    }
+                                }
+                            }
+                        }
+                    } 
+                } else {
+                    // Date is in the past or equal to the current date
+                    System.out.println("false");
+                }
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(BoundaryCreateBooking.class.getName()).log(Level.SEVERE, null, ex);
         }
-        // Enable the Session Timing JComboBox
-        sessionTimingComboBox.setEnabled(true);
     }
      
-     private int getRoomID(int MovieID, String sessionTime) throws Exception{
-        ArrayList<String[]> sessionArr = getSessionCtrl.executeTask();
-        String movieStr = Integer.toString(MovieID);
-        int r = 0;
-        for (String[] session : sessionArr) {
-            String sess = session[1]; // Index 1 represents the "sessionTiming" field
-            String mov = session[2]; // Index 1 represents the "movieID" field
+    private void populateTicketType(int UID){
+        try {
+            // Clear the current options
+            //ticketTypeComboBox.removeAllItems();
             
-            if (sess == sessionTime && mov == movieStr){
-                r = Integer.parseInt(session[0]);
+            userAccount checkUser = getUserInfoCtrl.retrieveUserAccountInfo(UID);
+            Date DOB = checkUser.getDOB();
+            
+            // Create a Calendar instance and set it to the birth date
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(DOB);
+
+            // Get the current date
+            Calendar currentDate = Calendar.getInstance();
+
+            // Calculate the age
+            int age = currentDate.get(Calendar.YEAR) - calendar.get(Calendar.YEAR);
+            List<ticketType> listTicket = searcTicketCtrl.searchTicketType();
+
+            for (ticketType ticket : listTicket) {
+                String tName = ticket.getTypeName();
+                int tAge = ticket.getAgeLimit();
+                
+                if (age < tAge && age > 0) {
+                    ticketTypeComboBox.addItem(tName);  // Add for student age group
+                }
+                else if (age >= tAge) {
+                    ticketTypeComboBox.addItem(tName);  // Add for senior age group
+                    break;
+                }
+                else {
+                    ticketTypeComboBox.addItem(tName);  // Add for adult age group
+                } 
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(BoundaryCreateBooking.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+     
+     private void getRoomCapacity(){
+        ArrayList<String[]> bookingArr = getBookingCtrl.executeTask(cUID);
+        
+        // Get the current date and time
+        LocalDateTime now = LocalDateTime.now();
+
+        // Define the date and time format of the strings in ms2
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        
+        for (int i = 0; i > r0.size(); i++){
+            for (String[] booking : bookingArr) {
+                String bsession = booking[2];
+                int broom = Integer.parseInt(booking[1]);
+                int bquantity = Integer.parseInt(booking[5]);
+                
+                // Parse the string into a LocalDateTime object
+                LocalDateTime dateTime = LocalDateTime.parse(bsession, formatter);
+
+                // Compare the date and time with the current date and time
+                int comparison = dateTime.compareTo(now);
+                    
+                if (broom == r0.get(i)){
+                    if (comparison > 0){    // if booking is in the future
+                        //r2 is capacity
+                        r2.set(i, r2.get(i)-bquantity);
+                    } 
+                }
             }
         }
-        // Enable the Session Timing JComboBox
-        sessionTimingComboBox.setEnabled(true);
-        return r;
      }
-     
-     private int getMovieID(String m) throws Exception{
-         ArrayList<String[]> movieArr = getMovieCtrl.executeTask();
+    
+    private String reformItem(String session){
+        String item = "";
+        for (int i = 0; i < ms2.size(); i++){
+            if (ms2.get(i) == session){
+                String mname = getMovieName(ms1.get(i));
+                item = mname + ", " + session + ", " + ms3.get(i);
+            }
+        }
+        return item;
+    }
+    
+    private String getMovieName(int id){
+        try {
+            ArrayList<String[]> movieArr = getMovieCtrl.executeTask();
+            
+            
+            for (String[] movie : movieArr) {
+                
+                if (movie[0].equals(String.valueOf(id))){
+                    return movie[1];
+                }
+            }
+            return "";
+        } catch (Exception ex) {
+            Logger.getLogger(BoundaryCreateBooking.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return "";
+     }
+    
+    
+    private int getTicketID(String m) throws Exception{
+        List<ticketType> listTicket = searcTicketCtrl.searchTicketType();
         
-        int id = 0;
-        for (String[] movie : movieArr) {
-            String name = movie[1]; // Index 1 represents the "Name" field
+        for (ticketType t : listTicket) {
+            String name = t.getTypeName() ;
             if (name == m){
-                return Integer.parseInt(movie[0]);
+                return t.getid();
             }
         }
         return 0;
      }
+    
+    private double getTicketPrice(String m) throws Exception{
+        List<ticketType> listTicket = searcTicketCtrl.searchTicketType();
+        
+        for (ticketType t : listTicket) {
+            String name = t.getTypeName() ;
+            if (name == m){
+                return t.getPrice();
+            }
+        }
+        return 0;
+     }
+    
+    private int getCurrentBookingID(int roomID, String sessionTime, int UID, int ticketID, int quantity){
+        ArrayList<String[]> bookingArr = getBookingCtrl.executeTask(cUID);
+        
+        for (String[] book: bookingArr){
+            if (book[1].equals(String.valueOf(roomID))){
+                if (book[2].equals(String.valueOf(sessionTime))){
+                    if (book[3].equals(String.valueOf(UID))){
+                        if (book[4].equals(String.valueOf(ticketID))){
+                            if (book[5].equals(String.valueOf(quantity)))
+                                return Integer.parseInt(book[0]);
+                        }
+                    }
+                }
+            }
+        }
+        return 0;
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 }

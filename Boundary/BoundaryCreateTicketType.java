@@ -8,12 +8,14 @@ import java.awt.event.*;
 public class BoundaryCreateTicketType extends JFrame implements ActionListener{
     private JTextField typeNameField;
     private JTextField priceField;
+    private JTextField ageLimitField;
     private JButton addButton;
     
     static ControllerCreateTicketType controllerCreate = new ControllerCreateTicketType();
 
     private String typeName;
     private double price;
+    private int ageLimit;
 
     public BoundaryCreateTicketType() {
         setTitle("Create User Profile");
@@ -39,6 +41,9 @@ public class BoundaryCreateTicketType extends JFrame implements ActionListener{
 
         priceField = new JTextField();
         panel.add(priceField);
+        
+        ageLimitField = new JTextField();
+        panel.add(ageLimitField);
 
         addButton = new JButton("Add");
         addButton.addActionListener((ActionEvent e) -> {
@@ -47,8 +52,9 @@ public class BoundaryCreateTicketType extends JFrame implements ActionListener{
             // Get the entered values
             typeName = typeNameField.getText();
             price = Double.parseDouble(priceField.getText());
+            ageLimit = Integer.parseInt(ageLimitField.getText());
             
-            boolean result = controllerCreate.createTicketType(typeName, price);
+            boolean result = controllerCreate.createTicketType(typeName, price, ageLimit);
             displayMsg(result);
             // Close the dialog
             dispose();

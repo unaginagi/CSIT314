@@ -1,5 +1,6 @@
 package Entity;
 
+import java.sql.Timestamp;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -115,7 +116,7 @@ public class booking {
     final String username = "root";
     final String dbpassword = "password";
     
-    public boolean createBoookingRecord(int roomID, String sessionTiming, int UID, int ticketID, int quantity, double price, String bookDate){
+    public boolean createBoookingRecord(int roomID, String sessionTiming, int UID, int ticketID, int quantity, double price){
         try {
             // Establish a connection to the database
             Connection conn = DriverManager.getConnection(url,username,dbpassword);
@@ -126,16 +127,17 @@ public class booking {
             /*-------------------------------------------------------*/
             
             // Prepare the SQL statement
-            String sql = "INSERT INTO booking (roomID, SessionTiming, UID, ticketID, quantity, price, book_date) VALUES (?, ?, ?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO booking (roomID, SessionTiming, UID, ticketID, quantity, price) VALUES (?, ?, ?, ?, ?, ?)";
             PreparedStatement pstmt = conn.prepareStatement(sql);
-            //pstmt.setInt(1, b.getBookingID());
             pstmt.setInt(1, roomID);
-            pstmt.setString(2, sessionTiming);
+            
+            Timestamp sessionTimestamp = Timestamp.valueOf(sessionTiming);
+            pstmt.setTimestamp(2, sessionTimestamp);
+            
             pstmt.setInt(3, UID);
             pstmt.setInt(4, ticketID);
             pstmt.setInt(5, quantity);
             pstmt.setDouble(6,price);
-            pstmt.setString(7, bookDate);
             
             // Execute the SQL statement
             int rowsInserted = pstmt.executeUpdate();
@@ -201,19 +203,24 @@ public class booking {
             return null;
         }
     }
-    public ArrayList<String[]> getBookingList(int ID) throws SQLException, Exception{
-        ArrayList<String[]> bookingArr = new ArrayList<>();
-		
-        Connection conn = DriverManager.getConnection(url,username,dbpassword); 
-	Statement stmt = conn.createStatement();
-
-	ResultSet rs = stmt.executeQuery("SELECT * FROM booking where UID =" + ID);
-	    
-	while(rs.next())
-            bookingArr.add(new String[] {rs.getString("bookingID"), rs.getString("roomID"), rs.getString("sessionTiming"),
-                rs.getString("UID"), rs.getString("ticketID"), rs.getString("quantity"), rs.getString("price"), rs.getString("bookDate")});
-	    
-	return bookingArr;
+    public ArrayList<String[]> getBookingList(int ID){
+        try {
+            ArrayList<String[]> bookingArr = new ArrayList<>();
+            
+            Connection conn = DriverManager.getConnection(url,username,dbpassword);
+            Statement stmt = conn.createStatement();
+            
+            ResultSet rs = stmt.executeQuery("SELECT * FROM booking where UID =" + ID);
+            
+            while(rs.next())
+                bookingArr.add(new String[] {rs.getString("bookingID"), rs.getString("roomID"), rs.getString("sessionTiming"),
+                    rs.getString("UID"), rs.getString("ticketID"), rs.getString("quantity"), rs.getString("price"), rs.getString("bookDate")});
+            
+            return bookingArr;
+        } catch (SQLException ex) {
+            Logger.getLogger(booking.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
     
     public boolean deleteBooking(int bookingID)

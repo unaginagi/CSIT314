@@ -14,83 +14,31 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-class BoundaryRetrieveBooking extends JDialog {
-    private JComboBox<String> bookingIDComboBox;
-    private JButton addButton;
-    
-    static GetBookingListController BookingListCtrl = new GetBookingListController();
+class BoundaryRetrieveBooking extends JFrame implements ActionListener {
+  
     static ControllerRetrieveBooking BookingRCtrl = new ControllerRetrieveBooking();
     static GetMovieListController getMovieCtrl = new GetMovieListController();
     static GetSessionListController getSessionCtrl = new GetSessionListController();
-    static GetRoomListController getRoomCtrl = new GetRoomListController();
     
     private booking b;
     
-    public BoundaryRetrieveBooking(Frame owner) throws Exception {
-        super(owner, "Retrieve Booking", true);
-        initComponents();
-        configureDialog();
-    }
-
-    private void initComponents() throws Exception {
-         // Create the JComboBox instances
-        bookingIDComboBox = new JComboBox<>();
+    public BoundaryRetrieveBooking(int bookingID){
+        setTitle("Booking Details");
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        setSize(300, 200);
+        setLocationRelativeTo(null);
+        setResizable(false);
         
-        JPanel panel = new JPanel();
-        panel.setLayout(new GridLayout(2, 2));
+        b = BookingRCtrl.retrieveBooking(bookingID);
+       displayTicketObject(b);
+       // Close the dialog
+       dispose();
 
-        panel.add(new JLabel("Booking ID: "));
-        panel.add(bookingIDComboBox);
-        
-        // Populate the JComboBox options
-        populateBookingID();
-
-        addButton = new JButton("Book Ticket");
-        addButton.addActionListener((ActionEvent e) -> {
-            try {
-                System.out.println("Making a Booking...");
-                
-                // Get the entered values
-                int selectedBID = (int) bookingIDComboBox.getSelectedItem();
-                
-                b = BookingRCtrl.retrieveBooking(selectedBID);
-                displayTicketObject(b);
-                // Close the dialog
-                dispose();
-            } catch (Exception ex) {
-                Logger.getLogger(BoundaryRetrieveBooking.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        });
-        panel.add(addButton);
-
-        getContentPane().add(panel);
-    }
-
-    private void configureDialog() {
-        setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-        pack();
-        setLocationRelativeTo(getOwner());
-    }
-
-    private void populateBookingID() throws Exception {
-        // Clear the current options
-        bookingIDComboBox.removeAllItems();
-        ArrayList<String[]> bookingArr = BookingListCtrl.executeTask();
-        
-        for (String[] book : bookingArr) {
-            int user = 100; /*---------------Pls Fix-----------------*/
-            String UID = Integer.toString(user);
-            if (book[3] == UID){
-                String bookid = book[0]; // Index 0 represents the "bookingID" field
-                bookingIDComboBox.addItem(bookid);
-            }
-                String name = book[0]; // Index 0 represents the "bookingID" field
-            bookingIDComboBox.addItem(name);
-        }
     }
     
-    private void displayTicketObject(booking b) throws Exception{
+    private void displayTicketObject(booking b){
         if (b != null) {
+            try {
                 JFrame frame = new JFrame("Booking Details");
                 frame.setSize(700, 300);
                 frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -149,6 +97,9 @@ class BoundaryRetrieveBooking extends JDialog {
 
                 frame.setVisible(true);
                 System.out.println("Success!");
+            } catch (Exception ex) {
+                Logger.getLogger(BoundaryRetrieveBooking.class.getName()).log(Level.SEVERE, null, ex);
+            }
             } else {
                 JOptionPane.showMessageDialog(this, "no booking record found");
                 System.out.println("Failed.");
@@ -210,5 +161,10 @@ class BoundaryRetrieveBooking extends JDialog {
         }
         
         return "";
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }

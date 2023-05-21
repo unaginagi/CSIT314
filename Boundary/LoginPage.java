@@ -85,12 +85,16 @@ public class LoginPage extends JFrame implements ActionListener {
             String username = usernameField.getText();
             String password = new String(passwordField.getPassword());
 
+            int loggedInUserProfileID= -1;
+            int loggedInUserID = -1;
             // Authentication Result
-            if (LoginPageLogin(username, password)>0) {
+            //int[] loggedInUserArray = LoginPageLogin(username, password);
+            //loggedInUserArray[1]
+            if (LoginPageLogin(username, password)[1]>0) {
                 JOptionPane.showMessageDialog(this, "Login successful!");
                 dispose();
                 //WHAT IS SEEN BASED ON WHO LOGS IN
-                if (LoginPageLogin(username, password)==1){
+                if (LoginPageLogin(username, password)[1]==1){
                     // USER: USER ADMIN
                     java.awt.EventQueue.invokeLater(new Runnable() {
                     public void run() {
@@ -98,25 +102,25 @@ public class LoginPage extends JFrame implements ActionListener {
                     }
                     });
                     
-                } else if (LoginPageLogin(username, password)==2){
+                } else if (LoginPageLogin(username, password)[1]==2){
                     // USER: CINEMA OWNER - view report
                     java.awt.EventQueue.invokeLater(new Runnable() {
                         public void run() {
                             new DashboardCinemaOwner().setVisible(true);
                         }
                     });
-                } else if (LoginPageLogin(username, password)==3){
+                } else if (LoginPageLogin(username, password)[1]==3){
                     // USER: CINEMA MANAGER - manage food drinks cinema room etc
                         java.awt.EventQueue.invokeLater(new Runnable() {
                         public void run() {
                             new DashboardCinemaManager().setVisible(true);
                         }
                         });
-                }else if (LoginPageLogin(username, password)==4){
+                }else if (LoginPageLogin(username, password)[1]==4){
                     // USER: CUSTOMER - book ticket
                     java.awt.EventQueue.invokeLater(new Runnable() {
                     public void run() {
-                        new DashboardCustomer().setVisible(true);
+                        new DashboardCustomer(LoginPageLogin(username, password)[0]).setVisible(true);
                     }
                     });
                 } else {
@@ -148,8 +152,8 @@ public class LoginPage extends JFrame implements ActionListener {
         }
     }
 
-    private int LoginPageLogin(String username, String password) {
-        int loggedInUserProfileID =-1;
+    private int[] LoginPageLogin(String username, String password) {
+        int[] loggedInUserProfileID = { -1, -1 };
         try {
             loggedInUserProfileID = LoginController.login(username,password);
         } catch (SQLException e) {

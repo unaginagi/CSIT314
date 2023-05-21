@@ -67,8 +67,7 @@ public class CinemaRoom{
         final String dbpassword = "password";
         
 	public String addRoom(CinemaRoom cr) throws SQLException, Exception {
-		Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
-		Connection conn = DriverManager.getConnection(url,username,dbpassword);
+            Connection conn = DriverManager.getConnection(url,username,dbpassword);
 		
 	    Statement stmt = conn.createStatement();
 	    
@@ -81,8 +80,7 @@ public class CinemaRoom{
 	}
 	
 	public String[] retrieveRoom(String id) throws SQLException, Exception {
-		Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
-		Connection conn = DriverManager.getConnection(url,username,dbpassword);
+            Connection conn = DriverManager.getConnection(url,username,dbpassword);
 		
 	    Statement stmt = conn.createStatement();
 		
@@ -95,8 +93,7 @@ public class CinemaRoom{
 	}
 	
 	public String updateRoom(CinemaRoom cr) throws SQLException, Exception {
-		Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
-		Connection conn = DriverManager.getConnection(url,username,dbpassword);
+            Connection conn = DriverManager.getConnection(url,username,dbpassword);
 		
 	    Statement stmt = conn.createStatement();
 	    
@@ -110,8 +107,7 @@ public class CinemaRoom{
 	}
 	
 	public String deleteRoom(String id) throws SQLException, Exception {
-		Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
-		Connection conn = DriverManager.getConnection(url,username,dbpassword);
+            Connection conn = DriverManager.getConnection(url,username,dbpassword);
 		
 	    Statement stmt = conn.createStatement();
 		
@@ -122,10 +118,9 @@ public class CinemaRoom{
 	}
 	
 	public ArrayList<String[]> searchRoom(String state) throws SQLException, Exception{
-		ArrayList<String[]> roomArr = new ArrayList<>();
+            ArrayList<String[]> roomArr = new ArrayList<>();
 		
-		Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
-		Connection conn = DriverManager.getConnection(url,username,dbpassword);
+            Connection conn = DriverManager.getConnection(url,username,dbpassword);
 		
 	    Statement stmt = conn.createStatement();
 
@@ -139,8 +134,7 @@ public class CinemaRoom{
 	}
 	
 	public String getStateCheckData(String id) throws SQLException, Exception{
-		Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
-		Connection conn = DriverManager.getConnection(url,username,dbpassword);
+            Connection conn = DriverManager.getConnection(url,username,dbpassword);
 		
 	    Statement stmt = conn.createStatement();
 	    
@@ -152,8 +146,7 @@ public class CinemaRoom{
 	}
 	
 	public ResultSet getDuplicateNameCheckData(CinemaRoom cr) throws SQLException, Exception{
-		Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
-		Connection conn = DriverManager.getConnection(url,username,dbpassword);
+            Connection conn = DriverManager.getConnection(url,username,dbpassword);
 		
 	    Statement stmt = conn.createStatement();
 	    
@@ -164,8 +157,7 @@ public class CinemaRoom{
 	}
 	
 	public ResultSet getRoomIdCheckData(String input) throws SQLException, Exception{
-		Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
-		Connection conn = DriverManager.getConnection(url,username,dbpassword);
+            Connection conn = DriverManager.getConnection(url,username,dbpassword);
 		
 	    Statement stmt = conn.createStatement();
 	    
@@ -176,8 +168,7 @@ public class CinemaRoom{
 	}
 	
 	public ResultSet getDuplicateRoomCheckData(CinemaRoom cr) throws SQLException, Exception{
-		Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
-		Connection conn = DriverManager.getConnection(url,username,dbpassword);
+            Connection conn = DriverManager.getConnection(url,username,dbpassword);
 		
 	    Statement stmt = conn.createStatement();
 	    
@@ -191,17 +182,16 @@ public class CinemaRoom{
 	}
 	
 	public ArrayList<String[]> getRoomList() throws SQLException, Exception{
-		ArrayList<String[]> roomArr = new ArrayList<>();
+            ArrayList<String[]> roomArr = new ArrayList<>();
 		
-		Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
-		Connection conn = DriverManager.getConnection(url,username,dbpassword);
+            Connection conn = DriverManager.getConnection(url,username,dbpassword);
 		
 	    Statement stmt = conn.createStatement();
 
-	    ResultSet rs = stmt.executeQuery("SELECT ID, Name FROM CinemaRoom");
+	    ResultSet rs = stmt.executeQuery("SELECT * FROM CinemaRoom");
 	    
 	    while(rs.next()) 
-		    roomArr.add(new String[] {rs.getString("ID"), rs.getString("Name")});
+		    roomArr.add(new String[] {rs.getString("ID"), rs.getString("Name"), rs.getString("Capacity"),rs.getString("State")});
 	    
 	    return roomArr;
 	}

@@ -1,8 +1,5 @@
 package Controller;
 
-import Entity.CinemaRoom;
-import Entity.Movie;
-import Entity.MovieSession;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DateFormat;
@@ -11,7 +8,9 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-
+import Entity.CinemaRoom;
+import Entity.Movie;
+import Entity.MovieSession;
 
 public class UpdateMovieSessionController {
 	private final MovieSession movieSession = new MovieSession();

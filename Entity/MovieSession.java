@@ -57,8 +57,7 @@ public class MovieSession{
         final String dbpassword = "password";
         
 	public String addSession(MovieSession ms) throws SQLException, Exception {
-		Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
-		Connection conn = DriverManager.getConnection(url,username,dbpassword);
+            Connection conn = DriverManager.getConnection(url,username,dbpassword);
 		
 	    Statement stmt = conn.createStatement();
 	    
@@ -74,8 +73,7 @@ public class MovieSession{
 	}
 	
 	public String[] retrieveSession(String roomID, String sessionTiming) throws SQLException, Exception{
-		Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
-		Connection conn = DriverManager.getConnection(url,username,dbpassword);
+            Connection conn = DriverManager.getConnection(url,username,dbpassword);
 		 
 	    Statement stmt = conn.createStatement();
 	         
@@ -89,8 +87,7 @@ public class MovieSession{
 	}
 	
 	public String updateSession(MovieSession ms) throws SQLException, Exception {
-		Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
-		Connection conn = DriverManager.getConnection(url,username,dbpassword);
+            Connection conn = DriverManager.getConnection(url,username,dbpassword);
 		
 	    Statement stmt = conn.createStatement();
 	    
@@ -106,8 +103,7 @@ public class MovieSession{
 	}
 	
 	public String deleteSession(String roomID, String sessionTiming) throws SQLException, Exception {
-		Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
-		Connection conn = DriverManager.getConnection(url,username,dbpassword);
+            Connection conn = DriverManager.getConnection(url,username,dbpassword);
 		
 	    Statement stmt = conn.createStatement();
 	    
@@ -124,8 +120,7 @@ public class MovieSession{
 	public ArrayList<String[]> searchSession(String movieID) throws SQLException, Exception{	         
 	    ArrayList<String[]> sessionArr = new ArrayList<>();
 		
-	    Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
-		Connection conn = DriverManager.getConnection(url,username,dbpassword);
+            Connection conn = DriverManager.getConnection(url,username,dbpassword);
 		 
 	    Statement stmt = conn.createStatement();
 	         
@@ -139,8 +134,7 @@ public class MovieSession{
 	}
 	
 	public ResultSet[] getConflictCheckData(MovieSession ms) throws SQLException, Exception{
-	    Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
-		Connection conn = DriverManager.getConnection(url,username,dbpassword);
+            Connection conn = DriverManager.getConnection(url,username,dbpassword);
 		 
 	    Statement stmtBef = conn.createStatement();
 	    Statement stmtAft = conn.createStatement();
@@ -163,8 +157,7 @@ public class MovieSession{
 	}
 	
 	public ResultSet getShowingMovieCheckData(String id) throws SQLException, Exception{
-		Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
-		Connection conn = DriverManager.getConnection(url,username,dbpassword);
+            Connection conn = DriverManager.getConnection(url,username,dbpassword);
 		 
 	    Statement stmt = conn.createStatement();
 		
@@ -173,8 +166,7 @@ public class MovieSession{
 	}
 	
 	public ResultSet getInUseRoomCheckData(String id) throws SQLException, Exception{
-		Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
-		Connection conn = DriverManager.getConnection(url,username,dbpassword);
+            Connection conn = DriverManager.getConnection(url,username,dbpassword);
 		 
 	    Statement stmt = conn.createStatement();
 		
@@ -183,10 +175,9 @@ public class MovieSession{
 	}
 	
 	public ArrayList<String[]> getSessionList() throws SQLException, Exception{
-		ArrayList<String[]> sessionArr = new ArrayList<>();
+            ArrayList<String[]> sessionArr = new ArrayList<>();
 		
-		Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
-		Connection conn = DriverManager.getConnection(url,username,dbpassword);
+            Connection conn = DriverManager.getConnection(url,username,dbpassword);
 		 
 	    Statement stmt = conn.createStatement();
 

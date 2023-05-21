@@ -14,7 +14,7 @@ public class GetBookingListController {
     
     private final booking entity = new booking();
 	
-	public ArrayList<String[]> executeTask(int ID) throws SQLException, Exception{
+	public ArrayList<String[]> executeTask(int ID){
 		return entity.getBookingList(ID);
 	}
 }

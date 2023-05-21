@@ -21,21 +21,15 @@ public class BoundaryGetBookings extends javax.swing.JFrame {
     
     int id;
     
-    public BoundaryGetBookings(int UID) throws Exception {
-        try {
-            initComponents();
-            ArrayList<String []> bookings = b.executeTask(UID);
-            DefaultTableModel model = (DefaultTableModel) list.getModel();
-            id = UID;
-            
-            for (String [] book : bookings) 
-            {
-                model.addRow(new Object[]{book[0], book[1], book[2], 
-                           book[3], book[4], book[5], book[6], book[7]});
-            }
-            
-        } catch (SQLException | ClassNotFoundException ex) {
-            displayErrorMsg();
+    public BoundaryGetBookings(int UID){
+        initComponents();
+        ArrayList<String []> bookings = b.executeTask(UID);
+        DefaultTableModel model = (DefaultTableModel) list.getModel();
+        id = UID;
+        for (String [] book : bookings)
+        {
+            model.addRow(new Object[]{book[0], book[1], book[2],
+                book[3], book[4], book[5], book[6], book[7]});
         }
     }
 
@@ -179,15 +173,14 @@ public class BoundaryGetBookings extends javax.swing.JFrame {
         int row = list.getSelectedRow();
         int column = 0;
         var BookingID1 = (int)list.getValueAt(row, column);
-        BoundaryReceiveBooking r = new BoundaryReceiveBooking (BookingID1);
+        BoundaryRetrieveBooking r = new BoundaryRetrieveBooking (BookingID1);
         r.setVisible(true);
-        dispose();
     }//GEN-LAST:event_selectActionPerformed
 
     private void backActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backActionPerformed
         // TODO add your handling code here:
-        adminUserSelectGUI aus = new adminUserSelectGUI(id);
-        aus.setVisible(true);
+        DashboardCustomer dc = new DashboardCustomer(id);
+        dc.setVisible(true);
         dispose();
         
     }//GEN-LAST:event_backActionPerformed
@@ -196,7 +189,6 @@ public class BoundaryGetBookings extends javax.swing.JFrame {
         // TODO add your handling code here:
         BoundaryCreateBooking bcb = new BoundaryCreateBooking(id);
         bcb.setVisible(true);
-        dispose();
     }//GEN-LAST:event_createActionPerformed
 
     private void deleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteActionPerformed
@@ -207,7 +199,6 @@ public class BoundaryGetBookings extends javax.swing.JFrame {
         int UID1 = (int)list.getValueAt(row, 3);
         BoundaryDeleteBooking r = new BoundaryDeleteBooking (BookingID1, UID1);
         r.setVisible(true);
-        dispose();
     }//GEN-LAST:event_deleteActionPerformed
     
     private void displayErrorMsg()

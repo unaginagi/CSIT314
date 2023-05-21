@@ -17,14 +17,15 @@ public class DashboardCustomer extends JFrame implements ActionListener {
     private JLabel titleLabel;
     private JButton bookTicketButton;
     private JButton viewReviewsButton;
-    private JButton prePurchaseButton;
     private JButton logoutButton;
-
-    public DashboardCustomer() {
+    private int cUID;
+    
+    public DashboardCustomer(int UID) {
         setTitle("Dashboard");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(300, 300);
         setLocationRelativeTo(null);
+        cUID = UID;
 
         JPanel panel = new JPanel(new GridBagLayout());
         GridBagConstraints constraints = new GridBagConstraints();
@@ -42,8 +43,6 @@ public class DashboardCustomer extends JFrame implements ActionListener {
         bookTicketButton.addActionListener(this);
         viewReviewsButton = new JButton("View Movie Reviews and Ratings");
         viewReviewsButton.addActionListener(this);
-        prePurchaseButton = new JButton("Pre-purchase food & drinks");
-        prePurchaseButton.addActionListener(this);
         logoutButton = new JButton("Logout");
         logoutButton.addActionListener(this);
 
@@ -62,11 +61,6 @@ public class DashboardCustomer extends JFrame implements ActionListener {
         constraints.gridx = 0;
         constraints.gridy = 3;
         constraints.gridwidth = 2;
-        panel.add(prePurchaseButton, constraints);
-
-        constraints.gridx = 0;
-        constraints.gridy = 4;
-        constraints.gridwidth = 2;
         panel.add(logoutButton, constraints);
 
         add(panel);
@@ -75,6 +69,11 @@ public class DashboardCustomer extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == bookTicketButton) {
             // TODO: Handle book ticket button action
+            SwingUtilities.invokeLater(() -> {
+                    BoundaryGetBookings dashboardFrame = new BoundaryGetBookings(cUID);
+                    dashboardFrame.setVisible(true);
+                    dispose();
+                });
         } else if (e.getSource() == viewReviewsButton) {
             // TODO: Handle view movie reviews and ratings button action
         } else if (e.getSource() == logoutButton) {

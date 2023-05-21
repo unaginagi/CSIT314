@@ -95,7 +95,7 @@ public class TicketTypeGUI extends JFrame implements ActionListener {
             tableModel.addRow(header);
             
             // Populate the table model with the ticket data
-            List<ticketType> listTicket = controllerSearch.searchTicketType(0, 0);
+            List<ticketType> listTicket = controllerSearch.searchTicketType();
             for (ticketType ticket : listTicket) {
                 Object[] rowData = {ticket.getid(), ticket.getTypeName(), ticket.getPrice()};
                 tableModel.addRow(rowData);

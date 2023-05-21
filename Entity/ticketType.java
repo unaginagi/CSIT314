@@ -13,21 +13,24 @@ public class ticketType {
     private int ID;
     private String typeName;
     private double price;
+    private int ageLimit;
 
     public ticketType(){
         
     }
     
-    public ticketType(int ID, String typeName, double price) {
+    public ticketType(int ID, String typeName, double price, int ageLimit) {
         setid(ID);
         setTypeName(typeName);
         setPrice(price);
+        setAgeLimit(ageLimit);
     }
     
     public ticketType(ticketType t) {
         setid(t.getid());
         setTypeName(t.getTypeName());
         setPrice(t.getPrice());
+        setAgeLimit(t.getAgeLimit());
     }
     
     public int getid(){
@@ -42,6 +45,10 @@ public class ticketType {
         return price;
     }
     
+    public int getAgeLimit(){
+        return ageLimit;
+    }
+    
     private void setid(int ID){
         this.ID = ID;
     }
@@ -53,12 +60,15 @@ public class ticketType {
     private void setPrice(double price){
         this.price = price;
     }
+    private void setAgeLimit(int ageLimit){
+        this.ageLimit = ageLimit;
+    }
     
     final String url = "jdbc:mysql://localhost:3306/cinemabooking";
     final String username = "root";
     final String dbpassword = "password";
     
-    public boolean addTicketType(String typeName, double price){               
+    public boolean addTicketType(String typeName, double price, int ageLimit){               
         try {
             // Establish a connection to the database
             Connection conn = DriverManager.getConnection(url,username,dbpassword);
@@ -78,10 +88,11 @@ public class ticketType {
             }
             
             // Prepare the SQL statement
-            String sql = "INSERT INTO tickettype (typeName, price) VALUES (?, ?)";
+            String sql = "INSERT INTO tickettype (typeName, price, ageLimit) VALUES (?, ?, ?)";
             PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, typeName);
             pstmt.setDouble(2, price);
+            pstmt.setInt(3, ageLimit);
             
             // Execute the SQL statement
             int rowsInserted = pstmt.executeUpdate();
@@ -104,7 +115,7 @@ public class ticketType {
             Connection conn = DriverManager.getConnection(url, username, dbpassword);
 
             // Prepare the SQL statement
-            String sql = "SELECT ID, typeName, price FROM tickettype WHERE typeName = ?";
+            String sql = "SELECT * FROM tickettype WHERE typeName = ?";
             PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, checkName);
 
@@ -116,8 +127,9 @@ public class ticketType {
                 int ticketID = rs.getInt("id");
                 String typeName = rs.getString("typeName");
                 double price = rs.getDouble("price");
+                int ageLimit = rs.getInt("ageLimit");
 
-                ticketType ticket = new ticketType(ticketID, typeName, price);
+                ticketType ticket = new ticketType(ticketID, typeName, price, ageLimit);
 
                 // Close the resources
                 rs.close();
@@ -140,17 +152,18 @@ public class ticketType {
         }
     }
     
-    public boolean sendTicketDetails(String oldName, String newName, double newPrice) {
+    public boolean sendTicketDetails(String oldName, String newName, double newPrice, int newAL) {
         try {
             // Establish a connection to the database
             Connection conn = DriverManager.getConnection(url, username, dbpassword);
 
             // Prepare the SQL statement
-            String sql = "UPDATE tickettype SET typeName = ?, price = ? WHERE typeName = ?";
+            String sql = "UPDATE tickettype SET typeName = ?, price = ?, ageLimit = ? WHERE typeName = ?";
             PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, newName);
             pstmt.setDouble(2, newPrice);
-            pstmt.setString(3, oldName);
+            pstmt.setInt(3,newAL);
+            pstmt.setString(4, oldName);
             
 
             // Execute the SQL statement
@@ -222,8 +235,9 @@ public class ticketType {
                 int ticketID = rs.getInt("ID");
                 String ticketName = rs.getString("typeName");
                 double ticketPrice = rs.getDouble("price");
+                int ageLimit = rs.getInt("ageLimit");
 
-                ticketType ticket = new ticketType(ticketID, ticketName, ticketPrice);
+                ticketType ticket = new ticketType(ticketID, ticketName, ticketPrice, ageLimit);
                 ticketTypes.add(ticket);
             }
 

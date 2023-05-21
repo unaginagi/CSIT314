@@ -77,8 +77,7 @@ public class Movie{
         final String dbpassword = "password";
         
 	public String addMovie(Movie m) throws SQLException, Exception {
-		Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
-		Connection conn = DriverManager.getConnection(url,username,dbpassword);
+            Connection conn = DriverManager.getConnection(url,username,dbpassword);
 		
 	    Statement stmt = conn.createStatement();
 	    
@@ -95,8 +94,7 @@ public class Movie{
 	}
 	
 	public String[] retrieveMovie(String id) throws SQLException, Exception {
-		Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
-		Connection conn = DriverManager.getConnection(url,username,dbpassword);
+            Connection conn = DriverManager.getConnection(url,username,dbpassword);
 		
 	    Statement stmt = conn.createStatement();
 		
@@ -110,8 +108,7 @@ public class Movie{
 	}
 
 	public String updateMovie(Movie m) throws SQLException, Exception {
-		Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
-		Connection conn = DriverManager.getConnection(url,username,dbpassword);
+            Connection conn = DriverManager.getConnection(url,username,dbpassword);
 		
 	    Statement stmt = conn.createStatement();
 	    
@@ -130,8 +127,7 @@ public class Movie{
 	}
 	
 	public String deleteMovie(String id) throws SQLException, Exception {
-		Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
-		Connection conn = DriverManager.getConnection(url,username,dbpassword);
+            Connection conn = DriverManager.getConnection(url,username,dbpassword);
 		
 	    Statement stmt = conn.createStatement();
 		
@@ -142,8 +138,7 @@ public class Movie{
 	}
 	
 	public String[] searchMovie(String name) throws SQLException, Exception{
-		Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
-		Connection conn = DriverManager.getConnection(url,username,dbpassword);
+            Connection conn = DriverManager.getConnection(url,username,dbpassword);
 		
 	    Statement stmt = conn.createStatement();
 	    
@@ -159,8 +154,7 @@ public class Movie{
 	}
 	
 	public ResultSet getMovieIdCheckData(String input) throws SQLException, Exception{
-		Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
-		Connection conn = DriverManager.getConnection(url,username,dbpassword);
+            Connection conn = DriverManager.getConnection(url,username,dbpassword);
 		
 	    Statement stmt = conn.createStatement();
 	    
@@ -171,8 +165,7 @@ public class Movie{
 	}
 	
 	public ResultSet getDuplicateMovieCheckData(Movie m) throws SQLException, Exception{
-		Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
-		Connection conn = DriverManager.getConnection(url,username,dbpassword);
+            Connection conn = DriverManager.getConnection(url,username,dbpassword);
 		
 	    Statement stmt = conn.createStatement();
 	    
@@ -188,8 +181,7 @@ public class Movie{
 	public ArrayList<String[]> getMovieList() throws SQLException, Exception{
 		ArrayList<String[]> movieArr = new ArrayList<>();
 		
-		Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
-		Connection conn = DriverManager.getConnection(url,username,dbpassword);
+            Connection conn = DriverManager.getConnection(url,username,dbpassword);
 		
 	    Statement stmt = conn.createStatement();
 	         
