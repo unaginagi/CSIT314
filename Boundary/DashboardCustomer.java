@@ -16,6 +16,7 @@ import javax.swing.SwingUtilities;
 public class DashboardCustomer extends JFrame implements ActionListener {
     private JLabel titleLabel;
     private JButton bookTicketButton;
+    private JButton FnBButton;
     private JButton viewReviewsButton;
     private JButton logoutButton;
     private int cUID;
@@ -41,6 +42,8 @@ public class DashboardCustomer extends JFrame implements ActionListener {
 
         bookTicketButton = new JButton("Book Ticket");
         bookTicketButton.addActionListener(this);
+        FnBButton = new JButton("Food & Beverages");
+        FnBButton.addActionListener(this);
         viewReviewsButton = new JButton("View Movie Reviews and Ratings");
         viewReviewsButton.addActionListener(this);
         logoutButton = new JButton("Logout");
@@ -56,10 +59,15 @@ public class DashboardCustomer extends JFrame implements ActionListener {
         constraints.gridx = 0;
         constraints.gridy = 2;
         constraints.gridwidth = 2;
+        panel.add(FnBButton, constraints);
+        
+        constraints.gridx = 0;
+        constraints.gridy = 3;
+        constraints.gridwidth = 2;
         panel.add(viewReviewsButton, constraints);
 
         constraints.gridx = 0;
-        constraints.gridy = 3;
+        constraints.gridy = 4;
         constraints.gridwidth = 2;
         panel.add(logoutButton, constraints);
 
@@ -68,14 +76,18 @@ public class DashboardCustomer extends JFrame implements ActionListener {
 
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == bookTicketButton) {
-            // TODO: Handle book ticket button action
+            // Handle book ticket button action
             SwingUtilities.invokeLater(() -> {
                     BoundaryGetBookings dashboardFrame = new BoundaryGetBookings(cUID);
                     dashboardFrame.setVisible(true);
                     dispose();
                 });
+        }else if (e.getSource() == FnBButton) {
+            // TODO: Handle Food & Beverages button action
+            
         } else if (e.getSource() == viewReviewsButton) {
             // TODO: Handle view movie reviews and ratings button action
+            
         } else if (e.getSource() == logoutButton) {
              int choice = JOptionPane.showConfirmDialog(this, "Are you sure you want to logout?", "Logout Confirmation", JOptionPane.YES_NO_OPTION);
             if (choice == JOptionPane.YES_OPTION) {

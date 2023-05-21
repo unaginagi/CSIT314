@@ -17,8 +17,8 @@ public class BoundaryGetBookings extends javax.swing.JFrame {
     /**
      * Creates new form NewJFrame
      */
-    GetBookingListController b = new GetBookingListController();
     
+    GetBookingListController b = new GetBookingListController();
     int id;
     
     public BoundaryGetBookings(int UID){
@@ -172,7 +172,8 @@ public class BoundaryGetBookings extends javax.swing.JFrame {
             
         int row = list.getSelectedRow();
         int column = 0;
-        var BookingID1 = (int)list.getValueAt(row, column);
+        String value = (String)list.getValueAt(row, column);
+        int BookingID1 = Integer.parseInt(value);
         BoundaryRetrieveBooking r = new BoundaryRetrieveBooking (BookingID1);
         r.setVisible(true);
     }//GEN-LAST:event_selectActionPerformed
@@ -195,20 +196,17 @@ public class BoundaryGetBookings extends javax.swing.JFrame {
         // TODO add your handling code here:
         int row = list.getSelectedRow();
         int column = 0;
-        int BookingID1 = (int)list.getValueAt(row, column);
-        int UID1 = (int)list.getValueAt(row, 3);
+        
+        String value = (String)list.getValueAt(row, column);
+        int BookingID1 = Integer.parseInt(value);
+        
+        value = (String) list.getValueAt(row, 3);
+        int UID1 = Integer.parseInt(value);
         BoundaryDeleteBooking r = new BoundaryDeleteBooking (BookingID1, UID1);
         r.setVisible(true);
     }//GEN-LAST:event_deleteActionPerformed
     
-    private void displayErrorMsg()
-    {
-        JOptionPane.showMessageDialog(null, "Error.");
-    }
-
-    /**
-     * @param args the command line arguments
-     */
+    
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">

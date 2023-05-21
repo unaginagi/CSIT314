@@ -2,15 +2,18 @@
 package Boundary;
 
 import Controller.ControllerRetrieveBooking;
+import Controller.ControllerSearchTicketType;
 import Controller.GetBookingListController;
 import Controller.GetMovieListController;
 import Controller.GetRoomListController;
 import Controller.GetSessionListController;
 import Entity.booking;
+import Entity.ticketType;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -19,26 +22,18 @@ class BoundaryRetrieveBooking extends JFrame implements ActionListener {
     static ControllerRetrieveBooking BookingRCtrl = new ControllerRetrieveBooking();
     static GetMovieListController getMovieCtrl = new GetMovieListController();
     static GetSessionListController getSessionCtrl = new GetSessionListController();
+    static GetRoomListController getRoomsCtrl = new GetRoomListController();
+    static ControllerSearchTicketType searcTicketCtrl = new ControllerSearchTicketType();
     
     private booking b;
+    private int bookID;
     
-    public BoundaryRetrieveBooking(int bookingID){
-        setTitle("Booking Details");
-        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        setSize(300, 200);
-        setLocationRelativeTo(null);
-        setResizable(false);
-        
+    public BoundaryRetrieveBooking(int bookingID){    
         b = BookingRCtrl.retrieveBooking(bookingID);
-       displayTicketObject(b);
-       // Close the dialog
-       dispose();
-
-    }
-    
-    private void displayTicketObject(booking b){
+        
         if (b != null) {
             try {
+                setLocationRelativeTo(null);
                 JFrame frame = new JFrame("Booking Details");
                 frame.setSize(700, 300);
                 frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -109,24 +104,26 @@ class BoundaryRetrieveBooking extends JFrame implements ActionListener {
     private String getMovieName(int id, String st) throws Exception{
         ArrayList<String[]> sessionArr = getSessionCtrl.executeTask();
         ArrayList<String[]> movieArr = getMovieCtrl.executeTask();
-        
+
         String movieStr = Integer.toString(id);
-        
-        //loop through session table to get movie ID
+
+        // Loop through session table to get movie ID
         int r = 0;
         for (String[] session : sessionArr) {
             String sess = session[1]; // Index 1 represents the "sessionTiming" field
-            String mov = session[2]; // Index 2 represents the "movieID" field
-            
-            if (sess == st && mov == movieStr){
-                r = Integer.parseInt(session[0]);
+            for (String[] s : sessionArr) {
+                String mov = s[2]; // Index 2 represents the "movieID" field
+                if (sess.equals(st) && mov.equals(movieStr)) {
+                    r = Integer.parseInt(session[0]);
+                }
             }
         }
+
         //loop through movie table to get movie name
         String mID = Integer.toString(r);
         for (String[] movie : movieArr) {
             String name = movie[0]; // Index 0 represents the "id" field
-            if (name == mID){
+            if (name.equals(mID)){
                 return movie[1];
             }
         }
@@ -134,13 +131,13 @@ class BoundaryRetrieveBooking extends JFrame implements ActionListener {
      }
     
     private String getRoomName(int id) throws Exception{
-        ArrayList<String[]> roomArr = getSessionCtrl.executeTask();
+        ArrayList<String[]> roomArr = getRoomsCtrl.executeTask();
         
         String rID = Integer.toString(id);
         
         for (String[] room : roomArr) {
             String name = room[0]; // Index 0 represents the "id" field
-            if (name == rID){
+            if (name.equals(rID)){
                 return room[1];
             }
         }
@@ -149,22 +146,20 @@ class BoundaryRetrieveBooking extends JFrame implements ActionListener {
     }
     
     private String getTicketName(int id) throws Exception{
-        ArrayList<String[]> ticketArr = getSessionCtrl.executeTask();
+        List<ticketType> listTicket = new ArrayList<>();
+        listTicket = searcTicketCtrl.searchTicketType();
         
-        String tID = Integer.toString(id);
-        
-        for (String[] t : ticketArr) {
-            String name = t[0]; // Index 0 represents the "id" field
-            if (name == tID){
-                return t[1];
-            }
+        for (ticketType ticket : listTicket) {
+               int tID = ticket.getid();
+               if (tID == id){
+                   return ticket.getTypeName();
+               }
         }
-        
         return "";
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        throw new UnsupportedOperationException("Not supported yet."); 
     }
 }

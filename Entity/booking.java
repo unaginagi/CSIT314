@@ -122,7 +122,10 @@ public class booking {
             Connection conn = DriverManager.getConnection(url,username,dbpassword);
             
             System.out.println("Connected, attempting to insert booking...");
-            
+            System.out.println(sessionTiming);
+                System.out.println(roomID);
+                System.out.println(ticketID);
+                
             //Check if cinemaRoom has capacity to fit
             /*-------------------------------------------------------*/
             
@@ -179,7 +182,7 @@ public class booking {
                 int ticketID = rs.getInt("ticketID");
                 int quantity = rs.getInt("quantity");
                 double price = rs.getDouble("price");
-                String bookDate = rs.getString("bookDate");
+                String bookDate = rs.getString("book_date");
 
                 booking b = new booking(bookingID,roomID,sessionTiming,UID,ticketID,quantity,price,bookDate);
                 
@@ -214,7 +217,7 @@ public class booking {
             
             while(rs.next())
                 bookingArr.add(new String[] {rs.getString("bookingID"), rs.getString("roomID"), rs.getString("sessionTiming"),
-                    rs.getString("UID"), rs.getString("ticketID"), rs.getString("quantity"), rs.getString("price"), rs.getString("bookDate")});
+                    rs.getString("UID"), rs.getString("ticketID"), rs.getString("quantity"), rs.getString("price"), rs.getString("book_date")});
             
             return bookingArr;
         } catch (SQLException ex) {

@@ -63,11 +63,6 @@ class BoundarySearchTicketType extends JFrame implements ActionListener {
         getContentPane().add(panel);
     }
 
-    private void configureDialog() {
-        setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-        pack();
-        setLocationRelativeTo(getOwner());
-    }
 
     private void displayTicketTypeList(List<ticketType> listTicket){
         if (listTicket != null) {

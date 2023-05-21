@@ -112,6 +112,9 @@ public class BoundaryCreateBooking extends JFrame implements ActionListener {
                 String selectedTicketType = (String) ticketTypeComboBox.getSelectedItem();
                 
                 String[] parts = selectedMovieSession.split(", ");
+                for(int i = 0; i < parts.length; i++){
+                    System.out.println(parts[i]);
+                }
                 String sessionTime = parts[1];
                 int roomID = Integer.parseInt(parts[2]);
                 System.out.println(sessionTime);
@@ -152,7 +155,7 @@ public class BoundaryCreateBooking extends JFrame implements ActionListener {
     
     private void displayMsg(boolean result){
         if (result) {
-                JOptionPane.showMessageDialog(this, "Ticket Type added successfully");
+                JOptionPane.showMessageDialog(this, "Booking added successfully");
                 System.out.println("Success!");
             } else {
                 JOptionPane.showMessageDialog(this, "Duplicate record found");
@@ -224,7 +227,7 @@ public class BoundaryCreateBooking extends JFrame implements ActionListener {
                                     if (!addedItems.contains(item)) {
                                         movieSessionComboBox.addItem(item);
                                         addedItems.add(item);
-                                        System.out.println("added");
+                                        //System.out.println("added");
                                     }
                                 }
                             }
@@ -232,7 +235,7 @@ public class BoundaryCreateBooking extends JFrame implements ActionListener {
                     } 
                 } else {
                     // Date is in the past or equal to the current date
-                    System.out.println("false");
+                    //System.out.println("false");
                 }
             }
         } catch (Exception ex) {
@@ -314,8 +317,8 @@ public class BoundaryCreateBooking extends JFrame implements ActionListener {
         String item = "";
         for (int i = 0; i < ms2.size(); i++){
             if (ms2.get(i) == session){
-                String mname = getMovieName(ms1.get(i));
-                item = mname + ", " + session + ", " + ms3.get(i);
+                String mname = getMovieName(ms3.get(i));
+                item = mname + ", " + session + ", " + ms1.get(i);
             }
         }
         return item;
@@ -342,10 +345,12 @@ public class BoundaryCreateBooking extends JFrame implements ActionListener {
     
     private int getTicketID(String m) throws Exception{
         List<ticketType> listTicket = searcTicketCtrl.searchTicketType();
-        
+        System.out.println(m);
         for (ticketType t : listTicket) {
             String name = t.getTypeName() ;
-            if (name == m){
+            if (name.equals(m)){
+                System.out.println(name);
+                System.out.println(t.getid());
                 return t.getid();
             }
         }
