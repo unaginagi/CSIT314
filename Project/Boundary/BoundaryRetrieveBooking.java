@@ -37,11 +37,11 @@ class BoundaryRetrieveBooking extends JFrame implements ActionListener {
                 JFrame frame = new JFrame("Booking Details");
                 frame.setSize(700, 300);
                 frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-                frame.setLayout(new GridLayout(8, 2));
+                frame.setLayout(new GridLayout(10, 2));
 
                 //get movie name
                 String movieName = getMovieName(b.getRoomID(),b.getSessionTiming());
-                
+                System.out.println("Movie Name: " + movieName);
                 //get room name
                 String roomName = getRoomName(b.getRoomID());
                 
@@ -55,6 +55,7 @@ class BoundaryRetrieveBooking extends JFrame implements ActionListener {
                 JLabel ticketTypeLabel = new JLabel("Ticket Type:");
                 JLabel quantityLabel = new JLabel("No. of tickets:");
                 JLabel priceLabel = new JLabel("Price:");
+                JLabel seatingLabel = new JLabel("Seating:");
                 JLabel bookDateLabel = new JLabel("Date of Booking:");
 
                 JLabel bookidValueLabel = new JLabel(String.valueOf(b.getBookingID()));
@@ -64,6 +65,7 @@ class BoundaryRetrieveBooking extends JFrame implements ActionListener {
                 JLabel ticketTypeValueLabel = new JLabel(String.valueOf(ticketName));
                 JLabel quantityValueLabel = new JLabel(String.valueOf(b.getQuantity()));
                 JLabel priceValueLabel = new JLabel(String.valueOf(b.getPrice()));
+                JLabel seatingValueLabel = new JLabel(String.valueOf(b.getSeating()));
                 JLabel bookDateValueLabel = new JLabel(String.valueOf(b.getBookDate()));
                 
                 frame.add(bookidLabel);
@@ -87,6 +89,9 @@ class BoundaryRetrieveBooking extends JFrame implements ActionListener {
                 frame.add(priceLabel);
                 frame.add(priceValueLabel);
                 
+                frame.add(seatingLabel);
+                frame.add(seatingValueLabel);
+                
                 frame.add(bookDateLabel);
                 frame.add(bookDateValueLabel);
 
@@ -104,17 +109,19 @@ class BoundaryRetrieveBooking extends JFrame implements ActionListener {
     private String getMovieName(int id, String st) throws Exception{
         ArrayList<String[]> sessionArr = getSessionCtrl.executeTask();
         ArrayList<String[]> movieArr = getMovieCtrl.executeTask();
-
-        String movieStr = Integer.toString(id);
-
+        System.out.println("check id: " + id);
+        String rid = Integer.toString(id);
+        
         // Loop through session table to get movie ID
         int r = 0;
         for (String[] session : sessionArr) {
             String sess = session[1]; // Index 1 represents the "sessionTiming" field
-            for (String[] s : sessionArr) {
-                String mov = s[2]; // Index 2 represents the "movieID" field
-                if (sess.equals(st) && mov.equals(movieStr)) {
-                    r = Integer.parseInt(session[0]);
+            if (sess.equals(st)){
+                for (String[] s : sessionArr) {
+                    String mov = s[0]; // Index 2 represents the "movieID" field
+                    if (mov.equals(rid)) {
+                        r = Integer.parseInt(s[2]);
+                    }
                 }
             }
         }
@@ -124,7 +131,7 @@ class BoundaryRetrieveBooking extends JFrame implements ActionListener {
         for (String[] movie : movieArr) {
             String name = movie[0]; // Index 0 represents the "id" field
             if (name.equals(mID)){
-                return movie[1];
+                return movie[1];    // Index 1 represents the "Movie Name" field
             }
         }
         return "";

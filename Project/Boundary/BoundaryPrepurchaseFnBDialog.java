@@ -25,8 +25,6 @@ public class BoundaryPrepurchaseFnBDialog extends JDialog {
             public void actionPerformed(ActionEvent e) {
                 answer = true;
                 dispose();
-                // Redirect to the desired page when "Yes" is clicked
-                // Your code to redirect to a different page goes here
             }
         });
 
@@ -35,8 +33,6 @@ public class BoundaryPrepurchaseFnBDialog extends JDialog {
             public void actionPerformed(ActionEvent e) {
                 answer = false;
                 dispose();
-                // Redirect to the desired page when "No" is clicked
-                // Your code to redirect to a different page goes here
             }
         });
 

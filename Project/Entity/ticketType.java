@@ -13,24 +13,21 @@ public class ticketType {
     private int ID;
     private String typeName;
     private double price;
-    private int ageLimit;
 
     public ticketType(){
         
     }
     
-    public ticketType(int ID, String typeName, double price, int ageLimit) {
+    public ticketType(int ID, String typeName, double price) {
         setid(ID);
         setTypeName(typeName);
         setPrice(price);
-        setAgeLimit(ageLimit);
     }
     
     public ticketType(ticketType t) {
         setid(t.getid());
         setTypeName(t.getTypeName());
         setPrice(t.getPrice());
-        setAgeLimit(t.getAgeLimit());
     }
     
     public int getid(){
@@ -45,10 +42,6 @@ public class ticketType {
         return price;
     }
     
-    public int getAgeLimit(){
-        return ageLimit;
-    }
-    
     private void setid(int ID){
         this.ID = ID;
     }
@@ -60,15 +53,12 @@ public class ticketType {
     private void setPrice(double price){
         this.price = price;
     }
-    private void setAgeLimit(int ageLimit){
-        this.ageLimit = ageLimit;
-    }
-    
+
     final String url = "jdbc:mysql://localhost:3306/cinemabooking";
     final String username = "root";
     final String dbpassword = "password";
     
-    public boolean addTicketType(String typeName, double price, int ageLimit){               
+    public boolean addTicketType(String typeName, double price){               
         try {
             // Establish a connection to the database
             Connection conn = DriverManager.getConnection(url,username,dbpassword);
@@ -88,11 +78,10 @@ public class ticketType {
             }
             
             // Prepare the SQL statement
-            String sql = "INSERT INTO tickettype (typeName, price, ageLimit) VALUES (?, ?, ?)";
+            String sql = "INSERT INTO tickettype (typeName, price) VALUES (?, ?, ?)";
             PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, typeName);
             pstmt.setDouble(2, price);
-            pstmt.setInt(3, ageLimit);
             
             // Execute the SQL statement
             int rowsInserted = pstmt.executeUpdate();
@@ -127,9 +116,8 @@ public class ticketType {
                 int ticketID = rs.getInt("id");
                 String typeName = rs.getString("typeName");
                 double price = rs.getDouble("price");
-                int ageLimit = rs.getInt("ageLimit");
 
-                ticketType ticket = new ticketType(ticketID, typeName, price, ageLimit);
+                ticketType ticket = new ticketType(ticketID, typeName, price);
 
                 // Close the resources
                 rs.close();
@@ -152,17 +140,16 @@ public class ticketType {
         }
     }
     
-    public boolean sendTicketDetails(String oldName, String newName, double newPrice, int newAL) {
+    public boolean sendTicketDetails(String oldName, String newName, double newPrice) {
         try {
             // Establish a connection to the database
             Connection conn = DriverManager.getConnection(url, username, dbpassword);
 
             // Prepare the SQL statement
-            String sql = "UPDATE tickettype SET typeName = ?, price = ?, ageLimit = ? WHERE typeName = ?";
+            String sql = "UPDATE tickettype SET typeName = ?, price = ? WHERE typeName = ?";
             PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, newName);
             pstmt.setDouble(2, newPrice);
-            pstmt.setInt(3,newAL);
             pstmt.setString(4, oldName);
             
 
@@ -235,9 +222,8 @@ public class ticketType {
                 int ticketID = rs.getInt("ID");
                 String ticketName = rs.getString("typeName");
                 double ticketPrice = rs.getDouble("price");
-                int ageLimit = rs.getInt("ageLimit");
 
-                ticketType ticket = new ticketType(ticketID, ticketName, ticketPrice, ageLimit);
+                ticketType ticket = new ticketType(ticketID, ticketName, ticketPrice);
                 ticketTypes.add(ticket);
             }
 

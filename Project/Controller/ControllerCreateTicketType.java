@@ -15,9 +15,9 @@ public class ControllerCreateTicketType {
         
     }
     
-    public boolean createTicketType(String typeName, double price, int ageLimit) {
+    public boolean createTicketType(String typeName, double price) {
         
         // pass to entity class
-        return entity.addTicketType(typeName, price, ageLimit);
+        return entity.addTicketType(typeName, price);
     }
 }

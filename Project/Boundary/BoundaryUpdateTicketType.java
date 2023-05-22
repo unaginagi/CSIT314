@@ -9,7 +9,6 @@ class BoundaryUpdateTicketType extends JFrame implements ActionListener {
     private JTextField oldtypeNameField;
     private JTextField newtypeNameField;
     private JTextField priceField;
-    private JTextField ageLimitField;
     private JButton addButton;
     
     static ControllerUpdateTicketType controllerUpdate = new ControllerUpdateTicketType();
@@ -46,8 +45,6 @@ class BoundaryUpdateTicketType extends JFrame implements ActionListener {
         priceField = new JTextField();
         panel.add(priceField);
         
-        ageLimitField = new JTextField();
-        panel.add(ageLimitField);
 
         addButton = new JButton("Update");
         addButton.addActionListener((ActionEvent e) -> {
@@ -57,9 +54,8 @@ class BoundaryUpdateTicketType extends JFrame implements ActionListener {
             String oldName = oldtypeNameField.getText();
             String newName = newtypeNameField.getText();
             double newPrice = Double.parseDouble(priceField.getText());
-            int ageLimit = Integer.parseInt(ageLimitField.getText());
             
-            boolean result = controllerUpdate.updateTicketType(oldName, newName, newPrice, ageLimit);
+            boolean result = controllerUpdate.updateTicketType(oldName, newName, newPrice);
             displayMsg(result);
             // Close the dialog
             dispose();

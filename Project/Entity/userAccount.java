@@ -16,7 +16,9 @@ public class userAccount
     public int profileID;
     
     
-    public static String URL = "jdbc:mysql://localhost:3306/cinemabooking?zeroDateTimeBehavior=CONVERT_TO_NULL";
+    public static String DB_URL = "jdbc:mysql://localhost:3306/cinemabooking?zeroDateTimeBehavior=CONVERT_TO_NULL";
+    public static String DB_USER = "root";
+    public static String DB_PASSWORD = "password";
     
     public userAccount ()  
     {
@@ -129,7 +131,7 @@ public class userAccount
         try
         {
             Class.forName ("com.mysql.cj.jdbc.Driver");
-            Connection myCon = DriverManager.getConnection (URL, "admin", "admin");
+            Connection myCon = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
     
             PreparedStatement myStmt; 
             myStmt = myCon.prepareStatement("INSERT INTO userAccount (name, DOB, user, password," +
@@ -150,7 +152,7 @@ public class userAccount
     {
         
         Class.forName ("com.mysql.cj.jdbc.Driver");
-            Connection myCon = DriverManager.getConnection (URL, "admin", "admin");
+            Connection myCon = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
         PreparedStatement myStmt;
         myStmt = myCon.prepareStatement("Select user from userAccount");
         ResultSet rset = myStmt.executeQuery();
@@ -171,7 +173,7 @@ public class userAccount
         try
         {
             Class.forName ("com.mysql.cj.jdbc.Driver");
-            Connection myCon = DriverManager.getConnection (URL, "admin", "admin");
+            Connection myCon = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
             
             PreparedStatement myStmt; 
             myStmt = myCon.prepareStatement("Select * from useraccount where UID = " + UID);
@@ -232,7 +234,7 @@ public class userAccount
         try
         {
             Class.forName ("com.mysql.cj.jdbc.Driver");
-            Connection myCon = DriverManager.getConnection (URL, "admin", "admin");
+            Connection myCon = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
             
             PreparedStatement myStmt; 
             myStmt = myCon.prepareStatement("Update userAccount SET name = '" + name + "', DOB = '" + DOB
@@ -253,7 +255,7 @@ public class userAccount
         try
         {
             Class.forName ("com.mysql.cj.jdbc.Driver");
-            Connection myCon = DriverManager.getConnection (URL, "admin", "admin");
+            Connection myCon = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
             
             PreparedStatement myStmt; 
             myStmt = myCon.prepareStatement("Update userAccount SET suspended = 1 WHERE UID = " + UID);
@@ -274,7 +276,7 @@ public class userAccount
         try
         {
             Class.forName ("com.mysql.cj.jdbc.Driver");
-            Connection myCon = DriverManager.getConnection (URL, "admin", "admin");
+            Connection myCon = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
             
             userAccount [] searched;
             searched = new userAccount [0];
@@ -419,7 +421,7 @@ public class userAccount
         try
         {
             Class.forName ("com.mysql.cj.jdbc.Driver");
-            Connection myCon = DriverManager.getConnection (URL, "admin", "admin");
+            Connection myCon = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
 
             PreparedStatement myStmt;
             String statement = "Select * from userprofile";
@@ -451,7 +453,7 @@ public class userAccount
 
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            myCon = DriverManager.getConnection(URL, "admin", "admin");
+            myCon = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
             statement = myCon.prepareStatement(query);
             statement.setString(1, username);
             statement.setString(2, password);

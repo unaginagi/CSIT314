@@ -10,7 +10,7 @@ public class ControllerUpdateTicketType {
         
     }
     
-    public boolean updateTicketType(String oldName, String newName, double newPrice, int ageLimit){
-        return entity.sendTicketDetails(oldName, newName, newPrice, ageLimit);
+    public boolean updateTicketType(String oldName, String newName, double newPrice){
+        return entity.sendTicketDetails(oldName, newName, newPrice);
     }
 }

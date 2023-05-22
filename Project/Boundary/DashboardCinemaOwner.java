@@ -66,8 +66,18 @@ public class DashboardCinemaOwner extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == bookingReportButton) {
             // TODO: Handle booking report button action
+            SwingUtilities.invokeLater(() -> {
+                    ReportBookingGUI dashboardFrame = new ReportBookingGUI();
+                    dashboardFrame.setVisible(true);
+                    dispose();
+                });
         } else if (e.getSource() == foodReportButton) {
             // TODO: Handle food report button action
+            SwingUtilities.invokeLater(() -> {
+                    ReportFoodGUI dashboardFrame = new ReportFoodGUI();
+                    dashboardFrame.setVisible(true);
+                    dispose();
+                });
         } else if (e.getSource() == logoutButton) {
             int choice = JOptionPane.showConfirmDialog(this, "Are you sure you want to logout?", "Logout Confirmation", JOptionPane.YES_NO_OPTION);
             if (choice == JOptionPane.YES_OPTION) {

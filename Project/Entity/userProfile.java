@@ -32,8 +32,8 @@ public class userProfile {
     
     // Database connection properties
     public static String DB_URL = "jdbc:mysql://localhost:3306/cinemabooking?zeroDateTimeBehavior=CONVERT_TO_NULL";
-    public static String DB_USER = "admin";
-    public static String DB_PASSWORD = "admin";
+    public static String DB_USER = "root";
+    public static String DB_PASSWORD = "password";
     
     public static boolean addUserProfile(String description) throws SQLException, Exception, ClassNotFoundException {
         try {

@@ -44,7 +44,7 @@ public class DashboardCustomer extends JFrame implements ActionListener {
         bookTicketButton.addActionListener(this);
         FnBButton = new JButton("Food & Beverages");
         FnBButton.addActionListener(this);
-        viewReviewsButton = new JButton("View Movie Reviews and Ratings");
+        viewReviewsButton = new JButton("View Cinema Reviews and Ratings");
         viewReviewsButton.addActionListener(this);
         logoutButton = new JButton("Logout");
         logoutButton.addActionListener(this);
@@ -84,9 +84,18 @@ public class DashboardCustomer extends JFrame implements ActionListener {
                 });
         }else if (e.getSource() == FnBButton) {
             // TODO: Handle Food & Beverages button action
-            
+            SwingUtilities.invokeLater(() -> {
+                    BoundaryGetFnB dashboardFrame = new BoundaryGetFnB(cUID);
+                    dashboardFrame.setVisible(true);
+                    dispose();
+                });
         } else if (e.getSource() == viewReviewsButton) {
             // TODO: Handle view movie reviews and ratings button action
+            SwingUtilities.invokeLater(() -> {
+                    ReviewAndRatingGUI dashboardFrame = new ReviewAndRatingGUI(cUID);
+                    dashboardFrame.setVisible(true);
+                    dispose();
+                });
             
         } else if (e.getSource() == logoutButton) {
              int choice = JOptionPane.showConfirmDialog(this, "Are you sure you want to logout?", "Logout Confirmation", JOptionPane.YES_NO_OPTION);

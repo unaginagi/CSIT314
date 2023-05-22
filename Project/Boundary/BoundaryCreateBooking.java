@@ -136,10 +136,9 @@ public class BoundaryCreateBooking extends JFrame implements ActionListener {
                 int cBID = getCurrentBookingID(roomID,sessionTime,cUID, ticketID, quantity);
                 if (answer) {
                     // Redirect to Page A
-                    // Your code to redirect to Page A
-                } else {
-                    // Redirect to Page B
-                    // Your code to redirect to Page B
+                    addprebookboundary preBookB = new addprebookboundary(cBID);
+                    preBookB.setVisible(true);
+                    dispose();
                 }
                 
                 // Close the dialog
@@ -158,7 +157,7 @@ public class BoundaryCreateBooking extends JFrame implements ActionListener {
                 JOptionPane.showMessageDialog(this, "Booking added successfully");
                 System.out.println("Success!");
             } else {
-                JOptionPane.showMessageDialog(this, "Duplicate record found");
+                JOptionPane.showMessageDialog(this, "Booking Failed. Please try again");
                 System.out.println("Failed.");
             }
     }
@@ -245,37 +244,11 @@ public class BoundaryCreateBooking extends JFrame implements ActionListener {
      
     private void populateTicketType(int UID){
         try {
-            // Clear the current options
-            //ticketTypeComboBox.removeAllItems();
-            
-            userAccount checkUser = getUserInfoCtrl.retrieveUserAccountInfo(UID);
-            Date DOB = checkUser.getDOB();
-            
-            // Create a Calendar instance and set it to the birth date
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTime(DOB);
-
-            // Get the current date
-            Calendar currentDate = Calendar.getInstance();
-
-            // Calculate the age
-            int age = currentDate.get(Calendar.YEAR) - calendar.get(Calendar.YEAR);
             List<ticketType> listTicket = searcTicketCtrl.searchTicketType();
 
             for (ticketType ticket : listTicket) {
                 String tName = ticket.getTypeName();
-                int tAge = ticket.getAgeLimit();
-                
-                if (age < tAge && age > 0) {
-                    ticketTypeComboBox.addItem(tName);  // Add for student age group
-                }
-                else if (age >= tAge) {
-                    ticketTypeComboBox.addItem(tName);  // Add for senior age group
-                    break;
-                }
-                else {
-                    ticketTypeComboBox.addItem(tName);  // Add for adult age group
-                } 
+                ticketTypeComboBox.addItem(tName);  // Add for student age group
             }
         } catch (Exception ex) {
             Logger.getLogger(BoundaryCreateBooking.class.getName()).log(Level.SEVERE, null, ex);
@@ -362,7 +335,7 @@ public class BoundaryCreateBooking extends JFrame implements ActionListener {
         
         for (ticketType t : listTicket) {
             String name = t.getTypeName() ;
-            if (name == m){
+            if (name.equals(m)){
                 return t.getPrice();
             }
         }
