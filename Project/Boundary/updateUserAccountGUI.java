@@ -244,22 +244,6 @@ public class updateUserAccountGUI extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void dayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dayActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_dayActionPerformed
-
-    private void monthActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_monthActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_monthActionPerformed
-
-    private void yearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_yearActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_yearActionPerformed
-
-    private void userActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_userActionPerformed
-        
-    }//GEN-LAST:event_userActionPerformed
-
     private void displayMsg()
     {
         JOptionPane.showMessageDialog(null, "Succesfull");
@@ -272,7 +256,7 @@ public class updateUserAccountGUI extends javax.swing.JFrame {
     {
         JOptionPane.showMessageDialog(null, "Error.");
     }
-    
+    //recieving files from other GUI
     public void recieve (int UID1, String name1, String user1, String pass1, String DOB1, String email1,
                            String phone1, String address1)
     {
@@ -334,20 +318,13 @@ public class updateUserAccountGUI extends javax.swing.JFrame {
                     displayMsg();
                 }
             }
-    // TODO add your handling code here:
+    // In case of error:
             catch (ParseException | SQLException | ClassNotFoundException ex) {
                     displayErrorMsg();
             }
         }
     }//GEN-LAST:event_updateActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
-
-    private void create1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_create1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_create1ActionPerformed
 
     private void cancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelActionPerformed
         // TODO add your handling code here
